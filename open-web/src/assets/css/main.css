@@ -1,0 +1,262 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body,
+#app,
+.wrapper {
+    -webkit-text-size-adjust: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'PingFang SC', "Helvetica Neue", Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif;
+}
+
+[v-cloak] {
+    display: none !important;
+}
+
+a {
+    text-decoration: none;
+    color: #409EFF;
+    cursor: pointer;
+}
+
+.l {
+    float: left;
+}
+
+.r {
+    float: right;
+}
+
+.mr15 {
+    margin-right: 15px;
+}
+
+.content-box {
+    position: absolute;
+    left: 250px;
+    right: 0;
+    top: 60px;
+    height: 100%;
+    bottom: 0;
+    overflow-y: scroll;
+    -webkit-transition: left .3s ease-in-out;
+    transition: left .3s ease-in-out;
+    /*background: #EFF2F5;*/
+}
+
+.content-collapse {
+    left: 65px;
+}
+
+.user-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+}
+
+.container {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-height: 450px;
+    margin-top: 20px;
+}
+
+.crumbs {
+    margin: -40px -40px 20px -40px;
+    padding: 20px 40px;
+    background: white;
+}
+
+.pagination {
+    margin: 20px 0;
+    text-align: right;
+}
+
+.plugins-tips {
+    padding: 20px 10px;
+    margin-bottom: 20px;
+}
+
+.el-button + .el-tooltip {
+    margin-left: 10px;
+}
+
+.el-table tr:hover {
+    background: #f6faff;
+}
+
+.mgb20 {
+    margin-bottom: 20px;
+}
+
+.move-enter-active,
+.move-leave-active {
+    transition: opacity .5s;
+}
+
+.move-enter,
+.move-leave {
+    opacity: 0;
+}
+
+.el-col > span {
+    float: right;
+    font-size: 12px;
+    margin: 5px 5px 0 0;
+    color: #606266;
+}
+
+.tab_content {
+    padding: 20px
+}
+
+.el-select-dropdown__item {
+    font-size: 12px;
+}
+
+.el-input__inner {
+    font-size: 12px;
+}
+
+.el-radio__label {
+    font-size: 12px;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+
+.mt5 {
+    margin-top: 5px;
+}
+
+.ml20 {
+    margin-left: 20px;
+}
+
+.ml10 {
+    margin-left: 10px;
+}
+
+.btn-container {
+    margin: 40px 0 0 255px;
+}
+
+.el-transfer-panel .el-transfer-panel__header .el-checkbox .el-checkbox__label {
+    font-size: 12px;
+}
+
+.el-checkbox__label {
+    font-size: 12px;
+}
+
+.red {
+    color: red;
+}
+
+.clearfix:after {
+    display: block;
+    clear: both;
+    content: "";
+    visibility: hidden;
+    height: 0;
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+.l {
+    float: left
+}
+
+.r {
+    float: right
+}
+
+.page_container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/*滚动条整体部分,必须要设置*/
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: #333;
+}
+
+/*滚动条的轨道*/
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px rgba(72, 75, 80, .3);
+    background-color: #52555a;
+}
+
+/*滚动条的滑块按钮*/
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #d3dfeb;
+    box-shadow: inset 0 0 1px #5e6e7d;
+}
+
+/*滚动条的上下两端的按钮*/
+::-webkit-scrollbar-button {
+    height: 5px;
+    background-color: #aaaaaa;
+}
+
+.el-form-item__label {
+    font-size: 12px;
+}
+
+/* .el-table .cell{
+    height: 22px;
+}
+.el-table th>.cell{
+    height: 22px;
+} */
+.exportLink {
+    width: 60px;
+    height: 32px;
+    line-height: 32px;
+    display: block;
+    color: #fff;
+    background-color: #409EFF;
+    border-color: #409EFF;
+    font-size: 12px;
+    border-radius: 3px;
+    text-align: center
+}
+
+.el-date-editor.el-input {
+    width: 170px;
+}
+
+
+.pager-ui {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* 去掉中间数据的分割线 */
+.el-table__row > td {
+    border: none;
+}
+
+/*!* 去掉上面的线 *!*/
+/*.el-table th.is-leaf{*/
+/*    border: none;*/
+/*}*/
+/* 去掉最下面的那一条线 */
+.el-table::before {
+    height: 0px;
+}

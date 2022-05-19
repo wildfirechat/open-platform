@@ -1,0 +1,10 @@
+open-server/target
+open-web/dist
+open-web/node_modules
+open-work/dist
+open-work/node_modules
+open-server/src/main/resources/dist
+application_server.lock.db
+application_server.mv.db
+open-server/.idea
+open-server/src/main/resources/static

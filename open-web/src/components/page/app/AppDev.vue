@@ -1,0 +1,153 @@
+<template>
+    <div style="height: 100%">
+        <el-main v-if="!currentApp">
+            <el-card>
+                <h2>自建应用</h2>
+                <p>自建应用是面向组织内部发布并使用的，开发文档请看
+                    <el-link href="https://docs.wildfirechat.cn" target="_blank" type="primary">开发文档</el-link>
+                </p>
+                <el-row :gutter="20">
+                    <el-col :span="6">
+                        <div class="create-button-container" @click="createAppDialogVisible = true">
+                            <el-button type="medium" class="button">+创建应用</el-button>
+                        </div>
+                    </el-col>
+                    <el-col :span="6" v-for="(app, index) in apps" :key="index" @click.native="showAppInfo(app)">
+                        <AppCard :app="app"/>
+                    </el-col>
+                </el-row>
+            </el-card>
+            <el-dialog title="创建应用" :visible.sync="createAppDialogVisible">
+                <el-form :model="createAppInfo">
+                    <el-form-item label="应用图标地址" :label-width="formLabelWidth">
+                        <el-input v-model="createAppInfo.portraitUrl" autocomplete="off" placeholder="应用图标地址"></el-input>
+                    </el-form-item>
+                    <el-form-item label="应用名称" :label-width="formLabelWidth">
+                        <el-input v-model="createAppInfo.name" autocomplete="off" placeholder="测试应用"></el-input>
+                    </el-form-item>
+                    <el-form-item label="应用描述" :label-width="formLabelWidth">
+                        <el-input v-model="createAppInfo.description" autocomplete="off" placeholder="应用的一句话描述"></el-input>
+                    </el-form-item>
+                    <el-form-item label="移动端地址" :label-width="formLabelWidth">
+                        <el-input v-model="createAppInfo.mobileUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                    </el-form-item>
+                    <el-form-item label="桌面端地址" :label-width="formLabelWidth">
+                        <el-input v-model="createAppInfo.desktopUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                    </el-form-item>
+                    <el-form-item label="回调/服务端地址" :label-width="formLabelWidth">
+                        <el-input v-model="createAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                    </el-form-item>
+                    <el-checkbox label="是否是全局应用" v-model="createAppInfo.global"></el-checkbox>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="createAppDialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="createApp">确 定</el-button>
+                </div>
+            </el-dialog>
+
+            <el-dialog title="修改应用" :visible.sync="modifyAppDialogVisible">
+                <el-form :model="modifyAppInfo">
+                    <el-form-item label="targetId" :label-width="formLabelWidth">
+                        <p>{{ modifyAppInfo.targetId }}</p>
+                    </el-form-item>
+                    <el-form-item label="secret" :label-width="formLabelWidth">
+                        <p>{{ modifyAppInfo.secret }}</p>
+                    </el-form-item>
+                    <el-form-item label="应用图标地址" :label-width="formLabelWidth">
+                        <el-input v-model="modifyAppInfo.portraitUrl" autocomplete="off" placeholder="应用图标地址"></el-input>
+                    </el-form-item>
+                    <el-form-item label="应用名称" :label-width="formLabelWidth">
+                        <el-input v-model="modifyAppInfo.name" autocomplete="off" placeholder="测试应用"></el-input>
+                    </el-form-item>
+                    <el-form-item label="应用描述" :label-width="formLabelWidth">
+                        <el-input v-model="modifyAppInfo.description" autocomplete="off" placeholder="应用的一句话描述"></el-input>
+                    </el-form-item>
+                    <el-form-item label="移动端地址" :label-width="formLabelWidth">
+                        <el-input v-model="modifyAppInfo.mobileUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                    </el-form-item>
+                    <el-form-item label="桌面端地址" :label-width="formLabelWidth">
+                        <el-input v-model="modifyAppInfo.desktopUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                    </el-form-item>
+                    <el-form-item label="回调/服务端地址" :label-width="formLabelWidth">
+                        <el-input v-model="modifyAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                    </el-form-item>
+                    <el-checkbox label="是否是全局应用" v-model="modifyAppInfo.global"></el-checkbox>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="modifyAppDialogVisible = false">取 消</el-button>
+                    <el-button type="danger" @click="deleteApp">删 除</el-button>
+                    <el-button type="primary" @click="updateApp">修 改</el-button>
+                </div>
+            </el-dialog>
+        </el-main>
+        <App v-else style="height: 100%" :app="currentApp"/>
+    </div>
+</template>
+
+<script>
+import App from "@/components/page/app/App";
+import {mapState} from "vuex";
+import AppCard from "@/components/common/AppCard";
+import AppInfo from "@/model/appInfo";
+
+export default {
+    name: "AppDev",
+    data() {
+        return {
+            currentApp: null,
+            createAppDialogVisible: false,
+            modifyAppDialogVisible: false,
+            createAppInfo: new AppInfo(),
+            modifyAppInfo: new AppInfo(),
+            formLabelWidth: '120px'
+        }
+    },
+    methods: {
+        createApp() {
+            this.createAppDialogVisible = false;
+            this.$store.dispatch('createApp', this.createAppInfo);
+            this.createAppInfo = new AppInfo();
+        },
+        showAppInfo(app) {
+            this.modifyAppInfo = app;
+            this.modifyAppDialogVisible = true;
+        },
+        updateApp() {
+            this.modifyAppDialogVisible = false;
+            this.$store.dispatch('updateApp', this.modifyAppInfo);
+            this.modifyAppInfo = new AppInfo();
+
+        },
+        deleteApp() {
+            this.modifyAppDialogVisible = false;
+            this.$store.dispatch("deleteApp", this.modifyAppInfo.targetId)
+
+        },
+    },
+    computed: mapState({
+        apps: state => state.app.apps,
+    }),
+    components: {
+        AppCard,
+        App
+    }
+
+}
+</script>
+
+<style lang="css" scoped>
+
+.create-button-container {
+    display: flex;
+    width: 250px;
+    height: 100px;
+    margin: 20px 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-button-container .button {
+    padding: 20px 30px;
+}
+
+</style>
