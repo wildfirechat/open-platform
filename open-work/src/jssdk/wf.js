@@ -1,6 +1,6 @@
-import bridge from 'dsbridge'
 import {Biz} from "./biz";
 
+const bridge =  window.__wf_bridge_ ? window.__wf_bridge_ : require('dsbridge');
 export class Wf {
     biz = new Biz();
 
