@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cn.wildfirechat</groupId>
-	<artifactId>application-server</artifactId>
+	<artifactId>open-platform-server</artifactId>
 	<version>0.1</version>
 	<packaging>jar</packaging>
 
