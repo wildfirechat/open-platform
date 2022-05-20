@@ -3,7 +3,7 @@
         <!--        <v-head></v-head>-->
         <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
             <div style="height: 60px; display: flex; justify-content: center;align-items: center" @click="go2home">
-                <p>野火开发平台</p>
+                <p>野火开放平台</p>
             </div>
             <el-menu :default-openeds="['1']" router>
                 <el-submenu index="1">
