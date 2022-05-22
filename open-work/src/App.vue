@@ -127,8 +127,8 @@ export default {
         },
 
         openApp(app) {
-            // TODO 判断是一下是否是 PC
-            wf.openUrl(app.mobileUrl);
+            let url = process ? app.desktopUrl : app.mobileUrl;
+            wf.openUrl(url);
         },
 
         checkApp(app) {
