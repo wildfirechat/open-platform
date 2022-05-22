@@ -15,6 +15,7 @@ public interface Service {
     RestResult createApplication(PojoApplicationEntity pojoApplicationEntity) throws Exception;
     RestResult updateApplication(PojoApplicationEntity pojoApplicationEntity) throws Exception;
     RestResult deleteApplication(String targetId) throws Exception;
+    RestResult uploadMedia(MultipartFile file) throws Exception;
     RestResult getApplication(String targetId);
     RestResult listApplication();
     RestResult listGlobalApplication();

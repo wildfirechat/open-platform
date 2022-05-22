@@ -8,8 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RequestMapping(value = "/api/")
 @RestController
@@ -72,6 +74,14 @@ public class ApiController {
     @DeleteMapping(value = "application/del/{targetId}", produces = "application/json;charset=UTF-8")
     public Object delApplication(@PathVariable("targetId") String targetId) throws Exception {
         return mService.deleteApplication(targetId);
+    }
+
+    /*
+    管理后台上传图片
+     */
+    @PostMapping(value = "application/media/upload")
+    public Object uploadMedia(@RequestParam("file") MultipartFile file) throws Exception {
+        return mService.uploadMedia(file);
     }
 
     /*

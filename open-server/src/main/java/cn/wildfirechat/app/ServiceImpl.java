@@ -10,6 +10,28 @@ import cn.wildfirechat.pojos.*;
 import cn.wildfirechat.proto.ProtoConstants;
 import cn.wildfirechat.sdk.*;
 import cn.wildfirechat.sdk.model.IMResult;
+import com.aliyun.oss.ClientException;
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.OSSException;
+import com.aliyun.oss.model.PutObjectRequest;
+import com.google.gson.Gson;
+import com.qcloud.cos.COSClient;
+import com.qcloud.cos.ClientConfig;
+import com.qcloud.cos.auth.BasicCOSCredentials;
+import com.qcloud.cos.auth.COSCredentials;
+import com.qcloud.cos.exception.CosClientException;
+import com.qcloud.cos.http.HttpProtocol;
+import com.qiniu.common.QiniuException;
+import com.qiniu.http.Response;
+import com.qiniu.storage.Configuration;
+import com.qiniu.storage.Region;
+import com.qiniu.storage.UploadManager;
+import com.qiniu.storage.model.DefaultPutRet;
+import com.qiniu.util.Auth;
+import io.minio.MinioClient;
+import io.minio.PutObjectOptions;
+import io.minio.errors.MinioException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
@@ -20,10 +42,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +70,26 @@ public class ServiceImpl implements Service {
 
     @Value("${im.admin_secret}")
     private String mAdminSecret;
+
+    @Value("${media.server.media_type}")
+    private int ossType;
+
+    @Value("${media.server_url}")
+    private String ossUrl;
+
+    @Value("${media.access_key}")
+    private String ossAccessKey;
+
+    @Value("${media.secret_key}")
+    private String ossSecretKey;
+
+    @Value("${media.bucket_name}")
+    private String ossBucket;
+    @Value("${media.bucket_domain}")
+    private String ossBucketDomain;
+
+    @Value("${local.media.temp_storage}")
+    private String ossTempPath;
 
     @Autowired
     private ApplicationEntityRepository applicationEntityRepository;
@@ -263,6 +312,127 @@ public class ServiceImpl implements Service {
         GeneralAdmin.destroyChannel(optionalApplicationEntity.get().getTargetId());
         UserAdmin.destroyRobot(optionalApplicationEntity.get().getTargetId());
         return RestResult.ok(null);
+    }
+
+    @Override
+    public RestResult uploadMedia(MultipartFile file) throws Exception {
+        String uuid = UUID.randomUUID().toString();
+        String fileName = uuid + "-" + System.currentTimeMillis() + "-" + file.getOriginalFilename();
+        File localFile = new File(ossTempPath, fileName);
+
+        try {
+            file.transferTo(localFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return RestResult.error(ERROR_SERVER_ERROR);
+        }
+
+        String bucket = ossBucket;
+        String bucketDomain = ossBucketDomain;
+
+
+        String url = bucketDomain + "/" + fileName;
+        if (ossType == 1) {
+            //构造一个带指定 Region 对象的配置类
+            Configuration cfg = new Configuration(Region.region0());
+            //...其他参数参考类注释
+            UploadManager uploadManager = new UploadManager(cfg);
+            //...生成上传凭证，然后准备上传
+
+            //如果是Windows情况下，格式是 D:\\qiniu\\test.png
+            String localFilePath = localFile.getAbsolutePath();
+            //默认不指定key的情况下，以文件内容的hash值作为文件名
+            String key = fileName;
+            Auth auth = Auth.create(ossAccessKey, ossSecretKey);
+            String upToken = auth.uploadToken(bucket);
+            try {
+                Response response = uploadManager.put(localFilePath, key, upToken);
+                //解析上传成功的结果
+                DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+                System.out.println(putRet.key);
+                System.out.println(putRet.hash);
+            } catch (QiniuException ex) {
+                Response r = ex.response;
+                System.err.println(r.toString());
+                try {
+                    System.err.println(r.bodyString());
+                } catch (QiniuException ex2) {
+                    //ignore
+                }
+                return RestResult.error(ERROR_SERVER_ERROR);
+            }
+        } else if (ossType == 2) {
+            // 创建OSSClient实例。
+            OSS ossClient = new OSSClientBuilder().build(ossUrl, ossAccessKey, ossSecretKey);
+
+            // 创建PutObjectRequest对象。
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, fileName, localFile);
+
+            // 上传文件。
+            try {
+                ossClient.putObject(putObjectRequest);
+            } catch (OSSException | ClientException e) {
+                e.printStackTrace();
+                return RestResult.error(ERROR_SERVER_ERROR);
+            }
+            // 关闭OSSClient。
+            ossClient.shutdown();
+        } else if (ossType == 3) {
+            try {
+                // 使用MinIO服务的URL，端口，Access key和Secret key创建一个MinioClient对象
+//                MinioClient minioClient = new MinioClient("https://play.min.io", "Q3AM3UQ867SPQQA43P2F", "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG");
+                MinioClient minioClient = new MinioClient(ossUrl, ossAccessKey, ossSecretKey);
+
+                // 使用putObject上传一个文件到存储桶中。
+//                minioClient.putObject("asiatrip",fileName, localFile.getAbsolutePath(), new PutObjectOptions(PutObjectOptions.MAX_OBJECT_SIZE, PutObjectOptions.MIN_MULTIPART_SIZE));
+                minioClient.putObject(bucket, fileName, localFile.getAbsolutePath(), new PutObjectOptions(file.getSize(), 0));
+            } catch (MinioException e) {
+                System.out.println("Error occurred: " + e);
+                return RestResult.error(ERROR_SERVER_ERROR);
+            } catch (NoSuchAlgorithmException | IOException | InvalidKeyException e) {
+                e.printStackTrace();
+                return RestResult.error(ERROR_SERVER_ERROR);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return RestResult.error(ERROR_SERVER_ERROR);
+            }
+        } else if(ossType == 4) {
+            //Todo 需要把文件上传到文件服务器。
+        } else if(ossType == 5) {
+            COSCredentials cred = new BasicCOSCredentials(ossAccessKey, ossSecretKey);
+            ClientConfig clientConfig = new ClientConfig();
+            String [] ss = ossUrl.split("\\.");
+            if(ss.length > 3) {
+                if(!ss[1].equals("accelerate")) {
+                    clientConfig.setRegion(new com.qcloud.cos.region.Region(ss[1]));
+                } else {
+                    clientConfig.setRegion(new com.qcloud.cos.region.Region("ap-shanghai"));
+                    try {
+                        URL u = new URL(ossUrl);
+                        clientConfig.setEndPointSuffix(u.getHost());
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                        return RestResult.error(ERROR_SERVER_ERROR);
+                    }
+                }
+            }
+
+            clientConfig.setHttpProtocol(HttpProtocol.https);
+            COSClient cosClient = new COSClient(cred, clientConfig);
+
+            try {
+                cosClient.putObject(bucket, fileName, localFile.getAbsoluteFile());
+            } catch (CosClientException e) {
+                e.printStackTrace();
+                return RestResult.error(ERROR_SERVER_ERROR);
+            } finally {
+                cosClient.shutdown();
+            }
+        }
+
+        UploadFileResponse response = new UploadFileResponse();
+        response.url = url;
+        return RestResult.ok(response);
     }
 
     @Override
