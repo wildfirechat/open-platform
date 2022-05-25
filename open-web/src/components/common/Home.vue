@@ -12,7 +12,7 @@
                 </el-submenu>
                 <el-menu-item>
                     <template slot="title"><i class="el-icon-document"></i>
-                        <a href="https://docs.wildfirechat.cn" style="color: #303133" target="_blank">开发文档</a>
+                        <a href="https://docs.wildfirechat.cn/open" style="color: #303133" target="_blank">开发文档</a>
                     </template>
                 </el-menu-item>
             </el-menu>
