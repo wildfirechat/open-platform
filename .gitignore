@@ -8,4 +8,5 @@ application_server.lock.db
 application_server.mv.db
 open-server/.idea
 open-server/src/main/resources/static
+.idea
 open-server
