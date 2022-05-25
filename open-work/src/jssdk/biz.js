@@ -1,7 +1,7 @@
 import {_handleNativeCall} from "@/jssdk/util";
 
 const bridge =  window.__wf_bridge_ ? window.__wf_bridge_ : require('dsbridge');
-export class Biz {
+export default class Biz {
 
     getAuthCode(appId, type, successCB, failCB) {
         bridge.call('getAuthCode', {
