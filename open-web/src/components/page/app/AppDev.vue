@@ -1,6 +1,6 @@
 <template>
     <div style="height: 100%">
-        <el-main v-if="!currentApp">
+        <el-main>
             <el-card>
                 <h2>自建应用</h2>
                 <p>自建应用是面向组织内部发布并使用的，开发文档请看
@@ -90,12 +90,10 @@
                 </div>
             </el-dialog>
         </el-main>
-        <App v-else style="height: 100%" :app="currentApp"/>
     </div>
 </template>
 
 <script>
-import App from "@/components/page/app/App";
 import {mapState} from "vuex";
 import AppCard from "@/components/common/AppCard";
 import AppInfo from "@/model/appInfo";
@@ -189,7 +187,6 @@ export default {
     }),
     components: {
         AppCard,
-        App
     }
 
 }

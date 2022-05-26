@@ -26,6 +26,7 @@
 </template>
 <script>
 import LoginRequest from "@/model/loginRequest";
+import App from "@/main";
 
 export default {
     data: function () {
@@ -58,6 +59,7 @@ export default {
                         this.$router.push({path: '/index'});
                     }).catch(reason => {
                         console.log('login failed', reason);
+                        App.$store.commit('showErrorMsg', reason);
                         self.loading = false;
                     })
                 } else {
