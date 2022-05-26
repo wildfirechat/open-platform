@@ -5,20 +5,9 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 
 export default {
     name: 'App',
-    computed: mapGetters({
-        'errorMsg': 'errorMsg'
-    }),
-    watch: {
-        errorMsg() {
-            if (this.errorMsg) {
-                this.$message(this.errorMsg.msg)
-            }
-        }
-    },
     data() {
         return {}
     },

@@ -26,7 +26,6 @@
 </template>
 <script>
 import LoginRequest from "@/model/loginRequest";
-import App from "@/main";
 
 export default {
     data: function () {
@@ -59,7 +58,7 @@ export default {
                         this.$router.push({path: '/index'});
                     }).catch(reason => {
                         console.log('login failed', reason);
-                        App.$store.commit('showErrorMsg', reason);
+                        this.$message.error('登录失败' + reason);
                         self.loading = false;
                     })
                 } else {

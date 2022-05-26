@@ -26,10 +26,10 @@ instance.interceptors.response.use(response => {
         }
     } else {
         if (response.config.url !== '/login' && code === 13) {
-            App.$store.commit('showErrorMsg', '请先登陆')
+            App.$message.error('请先登陆')
             App.$router.push('/login')
         }
-        App.$store.commit('showErrorMsg', message);
+        App.$message.error(message);
 
         return Promise.reject({code});
     }

@@ -1,6 +1,5 @@
 <template>
     <el-container style="height: 100%">
-        <!--        <v-head></v-head>-->
         <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
             <div style="height: 60px; display: flex; justify-content: center;align-items: center" @click="go2home">
                 <p>野火开放平台</p>
@@ -63,7 +62,6 @@
 
 <script>
 
-import App from "@/main";
 import {mapState} from "vuex";
 
 export default {
@@ -110,7 +108,7 @@ export default {
                 if (valid) {
 
                     if (this.updatePwdRequest.newPwd !== this.updatePwdRequest.confirmNewPwd) {
-                        App.$store.commit('showErrorMsg', '两次输入的密码不一致');
+                        this.$message.error('两次输入的密码不一致');
                     } else {
                         this.$store.dispatch('updatePwd', {
                             oldPassword: this.updatePwdRequest.oldPwd,

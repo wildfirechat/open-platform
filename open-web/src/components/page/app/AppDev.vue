@@ -23,7 +23,7 @@
                         <el-input v-model="createAppInfo.portraitUrl" autocomplete="off" disabled placeholder="应用图标地址"></el-input>
                         <el-upload
                             class="upload-demo"
-                            action="http://localhost:8880/api/application/media/upload/"
+                            :action="uploadMediaUrl"
                             :with-credentials="true"
                             :on-success="onPortraitUploaded"
                             :before-upload="beforePortraitUpload"
@@ -108,6 +108,9 @@ export default {
             createAppInfo: new AppInfo(),
             modifyAppInfo: new AppInfo(),
             formLabelWidth: '140px',
+            uploadMediaUrl: '/api/application/media/upload/',
+            // 本地调试
+            // uploadMediaUrl: 'http://localhost:8880/api/application/media/upload/',
 
             rules: {
                 portraitUrl: [
@@ -165,6 +168,8 @@ export default {
         onPortraitUploaded(res, file) {
             if (res.code === 0) {
                 this.createAppInfo.portraitUrl = res.result.url;
+            } else {
+                this.$message.error('头像上传失败 ' + res);
             }
             console.log('res, file', res, file)
         },
