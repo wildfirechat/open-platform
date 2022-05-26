@@ -25,7 +25,6 @@
     </div>
 </template>
 <script>
-import {mapState} from 'vuex'
 import LoginRequest from "@/model/loginRequest";
 
 export default {
@@ -46,17 +45,9 @@ export default {
             },
         }
     },
-    computed: mapState({
-        msg: state => state.login.msg,
-        sessionId: state => state.login.sessionId,
-        pageType: state => state.login.pageType,
-        userName: state => state.login.userName,
-        userType: state => state.login.userType,
-        retcode: state => state.login.retCode
-    }),
     methods: {
         submitForm(formName) {
-            var self = this;
+            let self = this;
             self.loading = true
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -65,6 +56,9 @@ export default {
                     )).then(() => {
                         console.log('login success');
                         this.$router.push({path: '/index'});
+                    }).catch(reason => {
+                        console.log('login failed', reason);
+                        self.loading = false;
                     })
                 } else {
                     self.loading = false
@@ -78,7 +72,7 @@ export default {
         htmlDom.removeAttribute('style');
     },
     created() {
-        if (localStorage.getItem('authToken')){
+        if (localStorage.getItem('authToken')) {
             this.$router.replace({path: '/index'});
         }
     }

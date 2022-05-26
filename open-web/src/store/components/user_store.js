@@ -12,9 +12,7 @@ export default {
     actions: {
         login({commit}, payload) {
             console.log('login', commit)
-            Api.login(payload).then(() => {
-                commit('setAccount', payload.account);
-            })
+            return Api.login(payload);
         },
 
         getAccount({state}) {

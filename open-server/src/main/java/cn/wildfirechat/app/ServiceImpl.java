@@ -431,7 +431,7 @@ public class ServiceImpl implements Service {
         }
 
         UploadFileResponse response = new UploadFileResponse();
-        response.url = url;
+        response.setUrl(url);
         return RestResult.ok(response);
     }
 

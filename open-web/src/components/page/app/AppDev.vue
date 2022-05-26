@@ -20,7 +20,17 @@
             <el-dialog title="创建应用" :visible.sync="createAppDialogVisible">
                 <el-form :model="createAppInfo">
                     <el-form-item label="应用图标地址" :label-width="formLabelWidth">
-                        <el-input v-model="createAppInfo.portraitUrl" autocomplete="off" placeholder="应用图标地址"></el-input>
+                        <el-input v-model="createAppInfo.portraitUrl" autocomplete="off" disabled placeholder="应用图标地址"></el-input>
+                        <el-upload
+                            class="upload-demo"
+                            action="http://localhost:8880/api/application/media/upload/"
+                            :with-credentials="true"
+                            :on-success="onPortraitUploaded"
+                            :before-upload="beforePortraitUpload"
+                            :show-file-list="false">
+                            <el-button size="small" type="primary" style="margin-top: 8px">点击上传</el-button>
+                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                        </el-upload>
                     </el-form-item>
                     <el-form-item label="应用名称" :label-width="formLabelWidth">
                         <el-input v-model="createAppInfo.name" autocomplete="off" placeholder="测试应用"></el-input>
@@ -121,8 +131,26 @@ export default {
         deleteApp() {
             this.modifyAppDialogVisible = false;
             this.$store.dispatch("deleteApp", this.modifyAppInfo.targetId)
-
         },
+
+        onPortraitUploaded(res, file) {
+            if (res.code === 0) {
+                this.createAppInfo.portraitUrl = res.result.url;
+            }
+            console.log('res, file', res, file)
+        },
+        beforePortraitUpload(file) {
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+                this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        }
     },
     computed: mapState({
         apps: state => state.app.apps,
