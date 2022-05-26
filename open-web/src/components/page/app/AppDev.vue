@@ -4,7 +4,7 @@
             <el-card>
                 <h2>自建应用</h2>
                 <p>自建应用是面向组织内部发布并使用的，开发文档请看
-                    <el-link href="https://docs.wildfirechat.cn" target="_blank" type="primary">开发文档</el-link>
+                    <el-link href="https://docs.wildfirechat.cn/open" target="_blank" type="primary">开发文档</el-link>
                 </p>
                 <el-row :gutter="20">
                     <el-col :span="6">
@@ -35,7 +35,7 @@
                     <el-form-item label="应用名称" :label-width="formLabelWidth" prop="name">
                         <el-input v-model="createAppInfo.name" autocomplete="off" placeholder="测试应用"></el-input>
                     </el-form-item>
-                    <el-form-item label="应用描述" :label-width="formLabelWidth" prop="desc">
+                    <el-form-item label="应用描述" :label-width="formLabelWidth" prop="description">
                         <el-input v-model="createAppInfo.description" autocomplete="off" placeholder="应用的一句话描述"></el-input>
                     </el-form-item>
                     <el-form-item label="移动端地址" :label-width="formLabelWidth" prop="mobileUrl">
@@ -119,9 +119,9 @@ export default {
                     {required: true, message: '请输入应用名称', trigger: 'blur'},
                     {min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur'}
                 ],
-                desc: [
+                description: [
                     {required: true, message: '请输入应用描述', trigger: 'blur'},
-                    {min: 1, max: 20, message: '长度在 1 到 10 个字符', trigger: 'blur'}
+                    {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
                 ],
                 mobileUrl: [
                     {required: true, message: '请输入移动端入口地址', trigger: 'blur'},

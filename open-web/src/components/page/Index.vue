@@ -1,11 +1,12 @@
 <template>
     <el-main class="hello">
         <h2>自建应用</h2>
-        <el-row :gutter="20">
+        <el-row v-if="apps && apps.length > 0" :gutter="20">
             <el-col :span="6" v-for="(app, index) in apps" :key="index">
                 <AppCard :app="app" @click.native="showAppInfo(app)"/>
             </el-col>
         </el-row>
+        <el-empty v-else description="暂无应用，请先到自建应用开发页创建应用"></el-empty>
         <el-dialog title="应用信息" :visible.sync="appInfoDialogVisible">
             <el-form :model="appInfo">
                 <el-form-item label="targetId" :label-width="formLabelWidth">
