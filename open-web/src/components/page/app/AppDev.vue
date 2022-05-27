@@ -69,7 +69,7 @@
                             class="upload-demo"
                             :action="uploadMediaUrl"
                             :with-credentials="true"
-                            :on-success="onPortraitUploaded"
+                            :on-success="onPortraitUpdated"
                             :before-upload="beforePortraitUpload"
                             :show-file-list="false">
                             <el-button size="small" type="primary" style="margin-top: 8px">点击上传</el-button>
@@ -185,6 +185,15 @@ export default {
         onPortraitUploaded(res, file) {
             if (res.code === 0) {
                 this.createAppInfo.portraitUrl = res.result.url;
+            } else {
+                this.$message.error('头像上传失败 ' + res);
+            }
+            console.log('res, file', res, file)
+        },
+
+        onPortraitUpdated(res, file) {
+            if (res.code === 0) {
+                this.modifyAppInfo.portraitUrl = res.result.url;
             } else {
                 this.$message.error('头像上传失败 ' + res);
             }
