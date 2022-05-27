@@ -56,29 +56,39 @@
             </el-dialog>
 
             <el-dialog title="修改应用" :visible.sync="modifyAppDialogVisible">
-                <el-form :model="modifyAppInfo">
+                <el-form :model="modifyAppInfo" :rules="rules" ref="modifyAppForm">
                     <el-form-item label="targetId" :label-width="formLabelWidth">
                         <p>{{ modifyAppInfo.targetId }}</p>
                     </el-form-item>
                     <el-form-item label="secret" :label-width="formLabelWidth">
                         <p>{{ modifyAppInfo.secret }}</p>
                     </el-form-item>
-                    <el-form-item label="应用图标地址" :label-width="formLabelWidth">
-                        <el-input v-model="modifyAppInfo.portraitUrl" autocomplete="off" placeholder="应用图标地址"></el-input>
+                    <el-form-item label="应用图标地址" :label-width="formLabelWidth" prop="portraitUrl">
+                        <el-input v-model="modifyAppInfo.portraitUrl" autocomplete="off" disabled placeholder="应用图标地址"></el-input>
+                        <el-upload
+                            class="upload-demo"
+                            :action="uploadMediaUrl"
+                            :with-credentials="true"
+                            :on-success="onPortraitUploaded"
+                            :before-upload="beforePortraitUpload"
+                            :show-file-list="false">
+                            <el-button size="small" type="primary" style="margin-top: 8px">点击上传</el-button>
+                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                        </el-upload>
                     </el-form-item>
-                    <el-form-item label="应用名称" :label-width="formLabelWidth">
+                    <el-form-item label="应用名称" :label-width="formLabelWidth" prop="name">
                         <el-input v-model="modifyAppInfo.name" autocomplete="off" placeholder="测试应用"></el-input>
                     </el-form-item>
-                    <el-form-item label="应用描述" :label-width="formLabelWidth">
+                    <el-form-item label="应用描述" :label-width="formLabelWidth" prop="description">
                         <el-input v-model="modifyAppInfo.description" autocomplete="off" placeholder="应用的一句话描述"></el-input>
                     </el-form-item>
-                    <el-form-item label="移动端地址" :label-width="formLabelWidth">
+                    <el-form-item label="移动端地址" :label-width="formLabelWidth" prop="mobileUrl">
                         <el-input v-model="modifyAppInfo.mobileUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
-                    <el-form-item label="桌面端地址" :label-width="formLabelWidth">
+                    <el-form-item label="桌面端地址" :label-width="formLabelWidth" prop="desktopUrl">
                         <el-input v-model="modifyAppInfo.desktopUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
-                    <el-form-item label="回调/服务端地址" :label-width="formLabelWidth">
+                    <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
                         <el-input v-model="modifyAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
                     <el-checkbox label="是否是全局应用" v-model="modifyAppInfo.global"></el-checkbox>
@@ -86,7 +96,7 @@
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modifyAppDialogVisible = false">取 消</el-button>
                     <el-button type="danger" @click="deleteApp">删 除</el-button>
-                    <el-button type="primary" @click="updateApp">修 改</el-button>
+                    <el-button type="primary" @click="updateApp('modifyAppForm')">修 改</el-button>
                 </div>
             </el-dialog>
         </el-main>
@@ -154,10 +164,17 @@ export default {
             this.modifyAppInfo = app;
             this.modifyAppDialogVisible = true;
         },
-        updateApp() {
-            this.modifyAppDialogVisible = false;
-            this.$store.dispatch('updateApp', this.modifyAppInfo);
-            this.modifyAppInfo = new AppInfo();
+        updateApp(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.modifyAppDialogVisible = false;
+                    this.$store.dispatch('updateApp', this.modifyAppInfo);
+                    this.modifyAppInfo = new AppInfo();
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
 
         },
         deleteApp() {
