@@ -141,7 +141,7 @@ export default {
                     {required: true, message: '请输入桌面端入口地址', trigger: 'blur'},
                 ],
                 serverUrl: [
-                    {required: true, message: '请输入回调地址', trigger: 'blur'},
+                    {required: false, message: '请输入回调地址', trigger: 'blur'},
                 ],
             }
         }
