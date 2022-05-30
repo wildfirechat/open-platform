@@ -89,11 +89,9 @@ export default {
                 console.log('getFavAppList error', reason)
                 if (reason.code === 13) {
                     if (loginOnFail) {
-                        wf.toast('未登录，重新登录中...')
                         console.log('getAuthCode and login')
                         this.login();
                     }
-                    wf.toast('获取我的应用失败')
                 }
             })
         },
