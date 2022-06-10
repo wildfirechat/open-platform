@@ -264,7 +264,7 @@ public class ServiceImpl implements Service {
         inputCreateChannel.setAuto(1);
         inputCreateChannel.setSecret(entity.getSecret());
         inputCreateChannel.setDesc(entity.getDescription());
-        inputCreateChannel.setState(Channel_State_Mask_Active_Subscribe | Channel_State_Mask_FullInfo | Channel_State_Mask_Message_Unsubscribed | Channel_State_Mask_Unsubscribed_User_Access);
+        inputCreateChannel.setState(Channel_State_Mask_Active_Subscribe | Channel_State_Mask_FullInfo | Channel_State_Mask_Message_Unsubscribed | Channel_State_Mask_Unsubscribed_User_Access | Channel_State_Mask_Private);
         IMResult<OutputCreateChannel> outputCreateChannelIMResult = GeneralAdmin.createChannel(inputCreateChannel);
         if(outputCreateChannelIMResult.getErrorCode() != ErrorCode.ERROR_CODE_SUCCESS) {
             throw new Exception("create channel failure");
