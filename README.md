@@ -11,7 +11,7 @@
 开放平台与应用是一对多的关系，理论上每个应用都要有个独立的服务，我们也提供了一个demo服务野火日报服务，可以直接基于demo开发新的应用，或者参考对接方式来对接现有应用。
 
 ## 系统架构图
-![架构图](./asserts/open_arch.png)
+![架构图](./assets/open_arch.png)
 图上红色部分为开放平台；绿色部分为应用，可能会有很多个应用，图上以应用1来举例；蓝色部分为IM系统。
 ### 开放平台
 开放平台有后端应用和work页面组成，work页面运行在野火内置的浏览器中，内置浏览器支持JS Bridge，可以通过JS SDK来与IM SDK进行交互。
@@ -32,7 +32,7 @@ config是IM验证页面合法性的方法。页面去后台获取config签名，
 ### 流程图
 工作页面的流程图
 
-![流程图](./asserts/open_flow.png)
+![流程图](./assets/open_flow.png)
 
 ## 编译
 项目是前后端分离的，但为了方便部署，默认打包是放到一起的。编译时需要先把前端页面编译后再编译后端。默认前端页面编译后会拷贝到后端的resource目录，这样就可以前后端放到一起部署，也可以自行修改为前后端分离的方式部署。具体编译方法参考每个组件的说明。
@@ -40,14 +40,14 @@ config是IM验证页面合法性的方法。页面去后台获取config签名，
 ## 截图
 
 应用列表
-![应用列表](./asserts/open_admin_application_list.png)
+![应用列表](./assets/open_admin_application_list.png)
 
 创建应用
-![创建应用](./asserts/open_admin_create_application.png)
+![创建应用](./assets/open_admin_create_application.png)
 
 修改应用
-![修改应用](./asserts/open_admin_modify_application.png)
+![修改应用](./assets/open_admin_modify_application.png)
 
 手机截图
 
-<img src="./asserts/open_admin_client.png" width = 50% height = 50% />
+<img src="./assets/open_admin_client.png" width = 50% height = 50% />
