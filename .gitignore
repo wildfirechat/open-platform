@@ -9,3 +9,4 @@ application_server.mv.db
 open-server/.idea
 open-server/src/main/resources/static
 .idea
+open_server.mv.db

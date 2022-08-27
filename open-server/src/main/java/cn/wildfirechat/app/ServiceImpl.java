@@ -88,9 +88,6 @@ public class ServiceImpl implements Service {
     @Value("${media.bucket_domain}")
     private String ossBucketDomain;
 
-    @Value("${local.media.temp_storage}")
-    private String ossTempPath;
-
     @Autowired
     private ApplicationEntityRepository applicationEntityRepository;
 
@@ -316,9 +313,14 @@ public class ServiceImpl implements Service {
 
     @Override
     public RestResult uploadMedia(MultipartFile file) throws Exception {
-        String uuid = UUID.randomUUID().toString();
-        String fileName = uuid + "-" + System.currentTimeMillis() + "-" + file.getOriginalFilename();
-        File localFile = new File(ossTempPath, fileName);
+        String fileName = file.getOriginalFilename();
+        String suffix = "";
+        String prefix = fileName;
+        if (fileName.contains(".")) {
+            suffix = fileName.substring(fileName.lastIndexOf("."));
+            prefix = fileName.substring(0, fileName.lastIndexOf("."));
+        }
+        File localFile = File.createTempFile(prefix, suffix);
 
         try {
             file.transferTo(localFile);
@@ -432,6 +434,7 @@ public class ServiceImpl implements Service {
 
         UploadFileResponse response = new UploadFileResponse();
         response.setUrl(url);
+        localFile.delete();
         return RestResult.ok(response);
     }
 
