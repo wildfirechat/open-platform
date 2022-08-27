@@ -34,6 +34,7 @@
                     <el-input v-model="appInfo.serverUrl" disabled autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                 </el-form-item>
                 <el-checkbox label="是否是全局应用" v-model="appInfo.global" disabled></el-checkbox>
+                <el-checkbox label="是否是后台应用" v-model="appInfo.background" disabled></el-checkbox>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="appInfoDialogVisible = false">确 定</el-button>

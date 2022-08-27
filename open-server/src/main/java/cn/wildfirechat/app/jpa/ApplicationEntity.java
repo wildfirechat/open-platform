@@ -34,6 +34,9 @@ public class ApplicationEntity implements Serializable {
 	@Column
 	private boolean global;
 
+	@Column(columnDefinition="tinyint(1) default 0")
+	private boolean background;
+
 	@Column
 	private long updateDt;
 
@@ -110,6 +113,14 @@ public class ApplicationEntity implements Serializable {
 
 	public void setGlobal(boolean global) {
 		this.global = global;
+	}
+
+	public boolean isBackground() {
+		return background;
+	}
+
+	public void setBackground(boolean background) {
+		this.background = background;
 	}
 
 	public long getUpdateDt() {

@@ -54,6 +54,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/application/del", "perms[user:admin]");
         filterChainDefinitionMap.put("/api/application/update", "perms[user:admin]");
         filterChainDefinitionMap.put("/api/application/list_global", "anon");
+        filterChainDefinitionMap.put("/api/application/list_foreground", "anon");
+        filterChainDefinitionMap.put("/api/application/list_background", "perms[user:admin]");
 
         //主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截 剩余的都需要认证
         filterChainDefinitionMap.put("/**", "login");

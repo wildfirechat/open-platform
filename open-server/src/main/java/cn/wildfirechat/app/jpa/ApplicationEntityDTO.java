@@ -16,6 +16,7 @@ public interface ApplicationEntityDTO {
 	public String getDesktop_url();
 	public String getServer_url();
 	public boolean isGlobal();
+	public boolean isBackground();
 	public long getUpdate_dt();
 	public long getCreate_dt();
 }

@@ -8,6 +8,7 @@ export default class AppInfo {
     desktopUrl = '';
     serverUrl = '';
     global = false;
+    background = false;
     updateDt = 0;
     createDt = 0;
 }

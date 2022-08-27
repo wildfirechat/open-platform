@@ -476,6 +476,26 @@ public class ServiceImpl implements Service {
     }
 
     @Override
+    public RestResult listForegroundApplication() {
+        Subject subject = SecurityUtils.getSubject();
+        boolean fullInfo = subject.isAuthenticated() && subject.isPermitted("user:admin");
+
+        List<PojoApplicationEntity> list = new ArrayList<>();
+        applicationEntityRepository.findAllForegroundEntity().forEach(entity -> list.add(convertApplicationEntity(entity, fullInfo)));
+        return RestResult.ok(list);
+    }
+
+    @Override
+    public RestResult listBackgroundApplication() {
+        Subject subject = SecurityUtils.getSubject();
+        boolean fullInfo = subject.isAuthenticated() && subject.isPermitted("user:admin");
+
+        List<PojoApplicationEntity> list = new ArrayList<>();
+        applicationEntityRepository.findAllBackgroundEntity().forEach(entity -> list.add(convertApplicationEntity(entity, fullInfo)));
+        return RestResult.ok(list);
+    }
+
+    @Override
     public RestResult favApplication(String targetId) {
         UserApplication userApplication = new UserApplication();
         userApplication.userId = getUserId();
@@ -524,6 +544,7 @@ public class ServiceImpl implements Service {
         entity.setDesktopUrl(pojoApplicationEntity.desktopUrl);
         entity.setServerUrl(pojoApplicationEntity.serverUrl);
         entity.setGlobal(pojoApplicationEntity.global);
+        entity.setBackground(pojoApplicationEntity.background);
         entity.setCreateDt(pojoApplicationEntity.createDt);
         entity.setUpdateDt(pojoApplicationEntity.updateDt);
         return entity;
@@ -542,6 +563,7 @@ public class ServiceImpl implements Service {
         pojoApplicationEntity.mobileUrl = entity.getMobileUrl();
         pojoApplicationEntity.desktopUrl = entity.getDesktopUrl();
         pojoApplicationEntity.global = entity.isGlobal();
+        pojoApplicationEntity.background = entity.isBackground();
         pojoApplicationEntity.updateDt = entity.getUpdateDt();
         pojoApplicationEntity.createDt = entity.getCreateDt();
         return pojoApplicationEntity;

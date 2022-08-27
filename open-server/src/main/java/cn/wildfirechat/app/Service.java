@@ -19,6 +19,8 @@ public interface Service {
     RestResult getApplication(String targetId);
     RestResult listApplication();
     RestResult listGlobalApplication();
+    RestResult listForegroundApplication();
+    RestResult listBackgroundApplication();
     RestResult favApplication(String targetId);
     RestResult unfavApplication(String targetId);
     RestResult getFavApplications();

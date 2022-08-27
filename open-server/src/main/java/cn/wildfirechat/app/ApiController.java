@@ -109,6 +109,22 @@ public class ApiController {
     }
 
     /*
+    获取前台应用列表，管理后台和客户端都可以调用
+    */
+    @GetMapping(value = "application/list_foreground", produces = "application/json;charset=UTF-8")
+    public Object listForegroundApplication() {
+        return mService.listForegroundApplication();
+    }
+
+    /*
+    获取后台应用列表，管理后台和客户端都可以调用
+    */
+    @GetMapping(value = "application/list_background", produces = "application/json;charset=UTF-8")
+    public Object listBackgroundApplication() {
+        return mService.listBackgroundApplication();
+    }
+
+    /*
     客户端收藏应用
      */
     @PutMapping(value = "user/fav/{targetId}", produces = "application/json;charset=UTF-8")

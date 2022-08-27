@@ -48,6 +48,7 @@
                         <el-input v-model="createAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
                     <el-checkbox label="是否是全局应用" v-model="createAppInfo.global"></el-checkbox>
+                    <el-checkbox label="是否是后台应用" v-model="createAppInfo.background"></el-checkbox>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="createAppDialogVisible = false">取 消</el-button>
@@ -92,6 +93,7 @@
                         <el-input v-model="modifyAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
                     <el-checkbox label="是否是全局应用" v-model="modifyAppInfo.global"></el-checkbox>
+                    <el-checkbox label="是否是后台应用" v-model="modifyAppInfo.background"></el-checkbox>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modifyAppDialogVisible = false">取 消</el-button>

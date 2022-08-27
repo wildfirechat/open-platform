@@ -5,7 +5,7 @@ export default {
         return axios.post('/user_login', params)
     },
     async getAppList() {
-        return axios.get('/application/list')
+        return axios.get('/application/list_foreground')
     },
     async getFavAppList() {
         return axios.get('/user/fav_list')

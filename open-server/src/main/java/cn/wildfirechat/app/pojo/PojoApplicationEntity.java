@@ -10,6 +10,7 @@ public class PojoApplicationEntity {
     public String desktopUrl;
     public String serverUrl;
     public boolean global;
+    public boolean background;
     public long updateDt;
     public long createDt;
 }

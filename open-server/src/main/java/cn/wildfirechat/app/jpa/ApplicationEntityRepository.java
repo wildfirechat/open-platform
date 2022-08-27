@@ -11,4 +11,10 @@ public interface ApplicationEntityRepository extends CrudRepository<ApplicationE
 
     @Query(value = "select * from t_application where global = true", nativeQuery = true)
     List<ApplicationEntity> findAllGlobalEntity();
+
+    @Query(value = "select * from t_application where background = false", nativeQuery = true)
+    List<ApplicationEntity> findAllForegroundEntity();
+
+    @Query(value = "select * from t_application where background = true", nativeQuery = true)
+    List<ApplicationEntity> findAllBackgroundEntity();
 }
