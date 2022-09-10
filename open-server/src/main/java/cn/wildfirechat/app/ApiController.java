@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @RequestMapping(value = "/api/")
 @RestController
@@ -96,32 +95,24 @@ public class ApiController {
     获取应用列表，管理后台和客户端都可以调用
      */
     @GetMapping(value = "application/list", produces = "application/json;charset=UTF-8")
-    public Object listApplication() {
-        return mService.listApplication();
+    public Object listApplication(@RequestParam(value = "type", required = false, defaultValue = "0") int type) {
+        return mService.listApplication(type);
+    }
+
+    /*
+    获取全部应用列表，管理后台
+    */
+    @GetMapping(value = "application/list_all", produces = "application/json;charset=UTF-8")
+    public Object listAllApplication() {
+        return mService.listApplication(-1);
     }
 
     /*
     获取全局应用列表，管理后台和客户端都可以调用
-     */
+    */
     @GetMapping(value = "application/list_global", produces = "application/json;charset=UTF-8")
     public Object listGlobalApplication() {
         return mService.listGlobalApplication();
-    }
-
-    /*
-    获取前台应用列表，管理后台和客户端都可以调用
-    */
-    @GetMapping(value = "application/list_foreground", produces = "application/json;charset=UTF-8")
-    public Object listForegroundApplication() {
-        return mService.listForegroundApplication();
-    }
-
-    /*
-    获取后台应用列表，管理后台和客户端都可以调用
-    */
-    @GetMapping(value = "application/list_background", produces = "application/json;charset=UTF-8")
-    public Object listBackgroundApplication() {
-        return mService.listBackgroundApplication();
     }
 
     /*

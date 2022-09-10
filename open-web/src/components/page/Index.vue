@@ -1,12 +1,30 @@
 <template>
     <el-main class="hello">
-        <h2>自建应用</h2>
-        <el-row v-if="apps && apps.length > 0" :gutter="20">
+        <div v-if="apps && apps.length > 0">
+            <h2>应用</h2>
+            <el-row :gutter="20">
             <el-col :span="6" v-for="(app, index) in apps" :key="index">
                 <AppCard :app="app" @click.native="showAppInfo(app)"/>
             </el-col>
         </el-row>
-        <el-empty v-else description="暂无应用，请先到自建应用开发页创建应用"></el-empty>
+        </div>
+        <div v-if="channels && channels.length > 0">
+            <h2>频道</h2>
+            <el-row :gutter="20">
+                <el-col :span="6" v-for="(app, index) in channels" :key="index">
+                    <AppCard :app="app" @click.native="showAppInfo(app)"/>
+                </el-col>
+            </el-row>
+        </div>
+        <div v-if="robots && robots.length > 0">
+            <h2>机器人</h2>
+            <el-row :gutter="20">
+                <el-col :span="6" v-for="(app, index) in robots" :key="index">
+                    <AppCard :app="app" @click.native="showAppInfo(app)"/>
+                </el-col>
+            </el-row>
+        </div>
+        <el-empty v-if="!apps.length && !channles.length && !robots.length" description="暂无应用、频道或机器人，请先到开发页创建应用"></el-empty>
         <el-dialog title="应用信息" :visible.sync="appInfoDialogVisible">
             <el-form :model="appInfo">
                 <el-form-item label="targetId" :label-width="formLabelWidth">
@@ -34,7 +52,6 @@
                     <el-input v-model="appInfo.serverUrl" disabled autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                 </el-form-item>
                 <el-checkbox label="是否是全局应用" v-model="appInfo.global" disabled></el-checkbox>
-                <el-checkbox label="是否是后台应用" v-model="appInfo.background" disabled></el-checkbox>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="appInfoDialogVisible = false">确 定</el-button>
@@ -60,6 +77,8 @@ export default {
     },
     computed: mapState({
         apps: state => state.app.apps,
+        channels: state => state.app.channels,
+        robots: state => state.app.robots,
     }),
     methods: {
         showAppInfo(app) {

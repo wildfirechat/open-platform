@@ -17,10 +17,8 @@ public interface Service {
     RestResult deleteApplication(String targetId) throws Exception;
     RestResult uploadMedia(MultipartFile file) throws Exception;
     RestResult getApplication(String targetId);
-    RestResult listApplication();
+    RestResult listApplication(int type);
     RestResult listGlobalApplication();
-    RestResult listForegroundApplication();
-    RestResult listBackgroundApplication();
     RestResult favApplication(String targetId);
     RestResult unfavApplication(String targetId);
     RestResult getFavApplications();

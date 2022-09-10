@@ -3,6 +3,8 @@ import Api from '@/api/api'
 export default {
     state: {
         apps: [],
+        channels: [],
+        robots: [],
     },
     mutations: {
         saveAppList(state, payload) {
@@ -11,8 +13,10 @@ export default {
     },
     actions: {
         getAppList(context) {
-            Api.getAppList().then((data) => {
-                context.state.apps = data;
+            Api.getAppList(0).then((data) => {
+                context.state.apps = data.filter(app => app.type === 0);
+                context.state.channels = data.filter(app => app.type === 1);
+                context.state.robots = data.filter(app => app.type === 2);
             })
         },
 

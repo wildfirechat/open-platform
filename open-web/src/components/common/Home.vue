@@ -6,8 +6,10 @@
             </div>
             <el-menu :default-openeds="['1']" router>
                 <el-submenu index="1">
-                    <template slot="title"><i class="el-icon-menu"></i>应用开发</template>
-                    <el-menu-item index="appDev">自建应用开发</el-menu-item>
+                    <template slot="title"><i class="el-icon-menu"></i>开发</template>
+                    <el-menu-item index="/dev/app">应用开发</el-menu-item>
+                    <el-menu-item index="/dev/channel">频道开发</el-menu-item>
+                    <el-menu-item index="/dev/robot">机器人开发</el-menu-item>
                 </el-submenu>
                 <el-menu-item>
                     <template slot="title"><i class="el-icon-document"></i>

@@ -22,7 +22,8 @@ public class RestResult {
         ERROR_SESSION_CANCELED(18, "会话已经取消"),
         ERROR_CODE_ACCOUNT_NOT_EXIST(19, "账户不存在"),
         ERROR_CODE_APPLICATION_ALREADY_EXIST(20, "应用已经存在"),
-        ERROR_CODE_PASSWORD_INCORRECT(21, "密码错误");
+        ERROR_CODE_PASSWORD_INCORRECT(21, "密码错误"),
+        ERROR_CODE_APPLICATION_TYPE_INVALID(22, "应用类型错误");
         public int code;
         public String msg;
 

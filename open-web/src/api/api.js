@@ -8,7 +8,7 @@ export default {
         return axios.get('/account')
     },
     async getAppList() {
-        return axios.get('/application/list')
+        return axios.get('/application/list_all')
     },
     async createApp(params) {
         return axios.post('/application/create', params)
