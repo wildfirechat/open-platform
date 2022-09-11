@@ -1,30 +1,38 @@
 <template>
     <el-main class="hello">
-        <div v-if="apps && apps.length > 0">
-            <h2>应用</h2>
-            <el-row :gutter="20">
-            <el-col :span="6" v-for="(app, index) in apps" :key="index">
-                <AppCard :app="app" @click.native="showAppInfo(app)"/>
-            </el-col>
-        </el-row>
+        <h2>应用</h2>
+        <div>
+            <el-row v-if="apps && apps.length > 0" :gutter="20">
+                <el-col :span="6" v-for="(app, index) in apps" :key="index">
+                    <AppCard :app="app" @click.native="showAppInfo(app)"/>
+                </el-col>
+            </el-row>
+            <el-empty v-else description="暂无应用" image="">
+                <el-button @click="createApp(0)" type="primary">创建应用</el-button>
+            </el-empty>
         </div>
-        <div v-if="channels && channels.length > 0">
+        <div>
             <h2>频道</h2>
-            <el-row :gutter="20">
+            <el-row v-if="channels && channels.length > 0" :gutter="20">
                 <el-col :span="6" v-for="(app, index) in channels" :key="index">
                     <AppCard :app="app" @click.native="showAppInfo(app)"/>
                 </el-col>
             </el-row>
+            <el-empty v-else description="暂无频道">
+                <el-button @click="createApp(1)" type="primary">创建频道</el-button>
+            </el-empty>
         </div>
-        <div v-if="robots && robots.length > 0">
+        <div>
             <h2>机器人</h2>
-            <el-row :gutter="20">
+            <el-row v-if="robots && robots.length > 0" :gutter="20">
                 <el-col :span="6" v-for="(app, index) in robots" :key="index">
                     <AppCard :app="app" @click.native="showAppInfo(app)"/>
                 </el-col>
             </el-row>
+            <el-empty v-else description="暂无机器人">
+                <el-button @click="createApp(2)" type="primary">创建机器人</el-button>
+            </el-empty>
         </div>
-        <el-empty v-if="!apps.length && !channles.length && !robots.length" description="暂无应用、频道或机器人，请先到开发页创建应用"></el-empty>
         <el-dialog title="应用信息" :visible.sync="appInfoDialogVisible">
             <el-form :model="appInfo">
                 <el-form-item label="targetId" :label-width="formLabelWidth">
@@ -85,6 +93,11 @@ export default {
             this.appInfo = app;
             this.appInfoDialogVisible = true;
         },
+
+        createApp(type = 0) {
+            let paths = ['/dev/app', '/dev/channel', '/dev/robot'];
+            this.$router.replace(paths[type]);
+        }
     }
 }
 </script>
@@ -93,5 +106,9 @@ export default {
 <style scoped>
 h1, h2 {
     font-weight: normal;
+}
+
+>>>.el-empty__image{
+    display: none;
 }
 </style>

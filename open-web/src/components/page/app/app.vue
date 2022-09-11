@@ -224,29 +224,16 @@ export default {
 </script>
 
 <style scoped>
-.el-card-define {
-    flex: 1;
-}
-
-.el-card-define >>> .el-card__body {
-    height: 100%;
+.create-button-container {
     display: flex;
-    flex-direction: column;
+    width: 250px;
+    height: 100px;
+    margin: 20px 10px;
+    justify-content: center;
+    align-items: center;
 }
 
-.header {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    background-color: rgb(238, 241, 246)
+.create-button-container .button {
+    padding: 20px 30px;
 }
-
-.header .title {
-    font-size: 16px;
-}
-
-.header .content {
-    font-size: 20px;
-    line-height: 1.7;
-}
-
 </style>
