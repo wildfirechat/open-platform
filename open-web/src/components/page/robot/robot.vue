@@ -3,19 +3,18 @@
         <el-main>
             <el-card>
                 <h2>机器人</h2>
-                <p>对应机器人服务，开发文档请看
-                    <el-link href="https://docs.wildfirechat.cn/open" target="_blank" type="primary">开发文档</el-link>
-                </p>
-                <el-row :gutter="20">
-                    <el-col :span="6">
-                        <div class="create-button-container" @click="createAppDialogVisible = true">
-                            <el-button type="medium" class="button">+创建机器人</el-button>
-                        </div>
-                    </el-col>
+                <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
+                    <p>对应机器人服务，开发文档请看
+                        <el-link href="https://docs.wildfirechat.cn/open" style="flex: 1" target="_blank" type="primary">开发文档</el-link>
+                    </p>
+                    <el-button type="primary" @click="createAppDialogVisible = true">创建机器人</el-button>
+                </div>
+                <el-row :gutter="20" v-if="apps && apps.length > 0">
                     <el-col :span="6" v-for="(app, index) in apps" :key="index" @click.native="showAppInfo(app)">
                         <AppCard :app="app"/>
                     </el-col>
                 </el-row>
+                <el-empty v-else description="暂无机器人" image=""></el-empty>
             </el-card>
             <el-dialog title="创建机器人" :visible.sync="createAppDialogVisible">
                 <el-form :model="createAppInfo" :rules="rules" ref="createAppForm">
@@ -33,7 +32,7 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="机器人名称" :label-width="formLabelWidth" prop="name">
-                        <el-input v-model="createAppInfo.name" autocomplete="off" placeholder="测试机器人"></el-input>
+                        <el-input v-model="createAppInfo.name" autocomplete="off" placeholder="机器人名称"></el-input>
                     </el-form-item>
                     <el-form-item label="机器人描述" :label-width="formLabelWidth" prop="description">
                         <el-input v-model="createAppInfo.description" autocomplete="off" placeholder="机器人的一句话描述"></el-input>
@@ -121,7 +120,7 @@ export default {
                     {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
                 ],
                 serverUrl: [
-                    {required: true, message: '请输入回调地址', trigger: 'blur'},
+                    {required: false, message: '请输入回调地址', trigger: 'blur'},
                 ],
             }
         }
@@ -190,7 +189,7 @@ export default {
             if (!isLt2M) {
                 this.$message.error('上传头像图片大小不能超过 2MB!');
             }
-            return (isJPG || isPNG )&& isLt2M;
+            return (isJPG || isPNG) && isLt2M;
         }
     },
     computed: mapState({
@@ -216,6 +215,10 @@ export default {
 
 .create-button-container .button {
     padding: 20px 30px;
+}
+
+>>> .el-empty__image {
+    display: none;
 }
 
 </style>

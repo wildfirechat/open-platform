@@ -3,19 +3,18 @@
         <el-main>
             <el-card>
                 <h2>频道</h2>
-                <p>类似微信公众号，开发文档请看
-                    <el-link href="https://docs.wildfirechat.cn/open" target="_blank" type="primary">开发文档</el-link>
-                </p>
-                <el-row :gutter="20">
-                    <el-col :span="6">
-                        <div class="create-button-container" @click="createAppDialogVisible = true">
-                            <el-button type="medium" class="button">+创建频道</el-button>
-                        </div>
-                    </el-col>
+                <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
+                    <p>类似微信公众号，开发文档请看
+                        <el-link href="https://docs.wildfirechat.cn/open" style="flex: 1" target="_blank" type="primary">开发文档</el-link>
+                    </p>
+                    <el-button type="primary" @click="createAppDialogVisible = true">创建频道</el-button>
+                </div>
+                <el-row :gutter="20" v-if="apps && apps.length > 0">
                     <el-col :span="6" v-for="(app, index) in apps" :key="index" @click.native="showAppInfo(app)">
                         <AppCard :app="app"/>
                     </el-col>
                 </el-row>
+                <el-empty v-else description="暂无频道" image=""></el-empty>
             </el-card>
             <el-dialog title="创建频道" :visible.sync="createAppDialogVisible">
                 <el-form :model="createAppInfo" :rules="rules" ref="createAppForm">
@@ -33,7 +32,7 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="频道名称" :label-width="formLabelWidth" prop="name">
-                        <el-input v-model="createAppInfo.name" autocomplete="off" placeholder="测试频道"></el-input>
+                        <el-input v-model="createAppInfo.name" autocomplete="off" placeholder="频道名称"></el-input>
                     </el-form-item>
                     <el-form-item label="频道描述" :label-width="formLabelWidth" prop="description">
                         <el-input v-model="createAppInfo.description" autocomplete="off" placeholder="频道的一句话描述"></el-input>
@@ -41,7 +40,7 @@
                     <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
                         <el-input v-model="createAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
-                    <el-checkbox label="是否是广播号(默认是订阅号，发送消息时，只给已经订阅了的用户发送；广播号，发送消息时，给所有人发送)" v-model="modifyAppInfo.global"></el-checkbox>
+                    <el-checkbox label="广播号(默认是订阅号，发送消息时，只给已经订阅了的用户发送；广播号，发送消息时，给所有人发送)" v-model="modifyAppInfo.global"></el-checkbox>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="createAppDialogVisible = false">取 消</el-button>
@@ -79,7 +78,7 @@
                     <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
                         <el-input v-model="modifyAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
-                    <el-checkbox label="是否是广播号(默认是订阅号，发送消息时，只能给已经订阅了的用户发送；广播号，发送消息时，给所有人发送)" v-model="modifyAppInfo.global"></el-checkbox>
+                    <el-checkbox label="广播号(默认是订阅号，发送消息时，只能给已经订阅了的用户发送；广播号，发送消息时，给所有人发送)" v-model="modifyAppInfo.global"></el-checkbox>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modifyAppDialogVisible = false">取 消</el-button>
@@ -123,7 +122,7 @@ export default {
                     {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
                 ],
                 serverUrl: [
-                    {required: true, message: '请输入回调地址', trigger: 'blur'},
+                    {required: false, message: '请输入回调地址', trigger: 'blur'},
                 ],
             }
         }
@@ -218,6 +217,10 @@ export default {
 
 .create-button-container .button {
     padding: 20px 30px;
+}
+
+>>> .el-empty__image {
+    display: none;
 }
 
 </style>

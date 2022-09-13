@@ -4,15 +4,12 @@
             <div style="height: 60px; display: flex; justify-content: center;align-items: center" @click="go2home">
                 <p>野火开放平台</p>
             </div>
-            <el-menu :default-openeds="['1']" router>
-                <el-submenu index="1">
-                    <template slot="title"><i class="el-icon-menu"></i>开发</template>
-                    <el-menu-item index="/dev/app">应用开发</el-menu-item>
-                    <el-menu-item index="/dev/channel">频道开发</el-menu-item>
-                    <el-menu-item index="/dev/robot">机器人开发</el-menu-item>
-                </el-submenu>
+            <el-menu default-active='/dev/app' router>
+                <el-menu-item index="/dev/app">应用</el-menu-item>
+                <el-menu-item index="/dev/channel">频道</el-menu-item>
+                <el-menu-item index="/dev/robot">机器人</el-menu-item>
                 <el-menu-item>
-                    <template slot="title"><i class="el-icon-document"></i>
+                    <template slot="title">
                         <a href="https://docs.wildfirechat.cn/open" style="color: #303133" target="_blank">开发文档</a>
                     </template>
                 </el-menu-item>

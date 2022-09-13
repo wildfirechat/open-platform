@@ -18,10 +18,15 @@ export default new Router({
             component: resolve => require(['../components/common/Home.vue'], resolve),
             meta: {title: '系统首页'},
             children: [
+                // {
+                //     path: '/index',
+                //     component: resolve => require(['../components/page/Index.vue'], resolve),
+                //     meta: {title: '野火开放平台'}
+                // },
                 {
                     path: '/index',
-                    component: resolve => require(['../components/page/Index.vue'], resolve),
-                    meta: {title: '野火开放平台'}
+                    component: resolve => require(['../components/page/app/app.vue'], resolve),
+                    meta: {title: '应用开发'}
                 },
                 {
                     path: '/dev/app',
