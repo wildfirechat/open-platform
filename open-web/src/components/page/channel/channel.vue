@@ -37,8 +37,11 @@
                     <el-form-item label="频道描述" :label-width="formLabelWidth" prop="description">
                         <el-input v-model.trim="createAppInfo.description" autocomplete="off" placeholder="频道的一句话描述"></el-input>
                     </el-form-item>
-                    <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
+                    <el-form-item label="频道服务端地址" :label-width="formLabelWidth" prop="serverUrl">
                         <el-input v-model.trim="createAppInfo.serverUrl" autocomplete="off" placeholder="http://{channel-server/频道服务}"></el-input>
+                        <label>点击查看
+                            <a href="https://github.com/wildfirechat/channel-platform" target="_blank">野火频道服务</a>
+                        </label>
                     </el-form-item>
                     <el-checkbox label="广播号(默认是订阅号，发送消息时，只给已经订阅了的用户发送；广播号，发送消息时，给所有人发送)" v-model.trim="modifyAppInfo.global"></el-checkbox>
                 </el-form>
@@ -75,8 +78,9 @@
                     <el-form-item label="频道描述" :label-width="formLabelWidth" prop="description">
                         <el-input v-model.trim="modifyAppInfo.description" autocomplete="off" placeholder="频道的一句话描述"></el-input>
                     </el-form-item>
-                    <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
-                        <el-input v-model.trim="modifyAppInfo.serverUrl" autocomplete="off" placeholder="http://{channel-server/频道服务}"></el-input>
+                    <el-form-item label="回调地址" :label-width="formLabelWidth" prop="serverUrl">
+                        <el-input v-model.trim="modifyAppInfo.serverUrl" autocomplete="off" :placeholder='"http://{channel-server/频道服务}/" + modifyAppInfo.targetId '></el-input>
+                        <label style="color: red"> 野火官方频道服务的回调地址是包含 channelId 的 !!! </label>
                     </el-form-item>
                     <el-checkbox label="广播号(默认是订阅号，发送消息时，只能给已经订阅了的用户发送；广播号，发送消息时，给所有人发送)" v-model.trim="modifyAppInfo.global"></el-checkbox>
                 </el-form>

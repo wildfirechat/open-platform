@@ -263,7 +263,9 @@ public class ServiceImpl implements Service {
         inputCreateChannel.setOwner(entity.getTargetId());
         inputCreateChannel.setName(entity.getName());
         inputCreateChannel.setPortrait(entity.getPortraitUrl());
-        inputCreateChannel.setCallback(entity.getServerUrl());
+        if (!StringUtils.isNullOrEmpty(entity.getServerUrl())){
+            inputCreateChannel.setCallback(entity.getServerUrl() + "/" + entity.getTargetId());
+        }
         inputCreateChannel.setAuto(1);
         inputCreateChannel.setSecret(entity.getSecret());
         inputCreateChannel.setDesc(entity.getDescription());
