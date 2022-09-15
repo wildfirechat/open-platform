@@ -19,7 +19,7 @@
             <el-dialog title="创建机器人" :visible.sync="createAppDialogVisible">
                 <el-form :model="createAppInfo" :rules="rules" ref="createAppForm">
                     <el-form-item label="机器人图标地址" :label-width="formLabelWidth" prop="portraitUrl">
-                        <el-input v-model="createAppInfo.portraitUrl" autocomplete="off" disabled placeholder="机器人图标地址"></el-input>
+                        <el-input v-model.trim="createAppInfo.portraitUrl" autocomplete="off" disabled placeholder="机器人图标地址"></el-input>
                         <el-upload
                             class="upload-demo"
                             :action="uploadMediaUrl"
@@ -32,13 +32,13 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="机器人名称" :label-width="formLabelWidth" prop="name">
-                        <el-input v-model="createAppInfo.name" autocomplete="off" placeholder="机器人名称"></el-input>
+                        <el-input v-model.trim="createAppInfo.name" autocomplete="off" placeholder="机器人名称"></el-input>
                     </el-form-item>
                     <el-form-item label="机器人描述" :label-width="formLabelWidth" prop="description">
-                        <el-input v-model="createAppInfo.description" autocomplete="off" placeholder="机器人的一句话描述"></el-input>
+                        <el-input v-model.trim="createAppInfo.description" autocomplete="off" placeholder="机器人的一句话描述"></el-input>
                     </el-form-item>
                     <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
-                        <el-input v-model="createAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                        <el-input v-model.trim="createAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -56,7 +56,7 @@
                         <p>{{ modifyAppInfo.secret }}</p>
                     </el-form-item>
                     <el-form-item label="机器人图标地址" :label-width="formLabelWidth" prop="portraitUrl">
-                        <el-input v-model="modifyAppInfo.portraitUrl" autocomplete="off" disabled placeholder="机器人图标地址"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.portraitUrl" autocomplete="off" disabled placeholder="机器人图标地址"></el-input>
                         <el-upload
                             class="upload-demo"
                             :action="uploadMediaUrl"
@@ -69,13 +69,13 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="机器人名称" :label-width="formLabelWidth" prop="name">
-                        <el-input v-model="modifyAppInfo.name" autocomplete="off" placeholder="测试机器人"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.name" autocomplete="off" placeholder="测试机器人"></el-input>
                     </el-form-item>
                     <el-form-item label="机器人描述" :label-width="formLabelWidth" prop="description">
-                        <el-input v-model="modifyAppInfo.description" autocomplete="off" placeholder="机器人的一句话描述"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.description" autocomplete="off" placeholder="机器人的一句话描述"></el-input>
                     </el-form-item>
                     <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
-                        <el-input v-model="modifyAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">

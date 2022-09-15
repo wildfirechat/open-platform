@@ -19,7 +19,7 @@
             <el-dialog title="创建应用" :visible.sync="createAppDialogVisible">
                 <el-form :model="createAppInfo" :rules="rules" ref="createAppForm">
                     <el-form-item label="应用图标地址" :label-width="formLabelWidth" prop="portraitUrl">
-                        <el-input v-model="createAppInfo.portraitUrl" autocomplete="off" disabled placeholder="应用图标地址"></el-input>
+                        <el-input v-model.trim="createAppInfo.portraitUrl" autocomplete="off" disabled placeholder="应用图标地址"></el-input>
                         <el-upload
                             class="upload-demo"
                             :action="uploadMediaUrl"
@@ -32,21 +32,21 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="应用名称" :label-width="formLabelWidth" prop="name">
-                        <el-input v-model="createAppInfo.name" autocomplete="off" placeholder="测试应用"></el-input>
+                        <el-input v-model.trim="createAppInfo.name" autocomplete="off" placeholder="测试应用"></el-input>
                     </el-form-item>
                     <el-form-item label="应用描述" :label-width="formLabelWidth" prop="description">
-                        <el-input v-model="createAppInfo.description" autocomplete="off" placeholder="应用的一句话描述"></el-input>
+                        <el-input v-model.trim="createAppInfo.description" autocomplete="off" placeholder="应用的一句话描述"></el-input>
                     </el-form-item>
                     <el-form-item label="移动端地址" :label-width="formLabelWidth" prop="mobileUrl">
-                        <el-input v-model="createAppInfo.mobileUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                        <el-input v-model.trim="createAppInfo.mobileUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
                     <el-form-item label="桌面端地址" :label-width="formLabelWidth" prop="desktopUrl">
-                        <el-input v-model="createAppInfo.desktopUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                        <el-input v-model.trim="createAppInfo.desktopUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
                     <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
-                        <el-input v-model="createAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                        <el-input v-model.trim="createAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
-                    <el-checkbox label="是否是全局应用" v-model="createAppInfo.global"></el-checkbox>
+                    <el-checkbox label="是否是全局应用" v-model.trim="createAppInfo.global"></el-checkbox>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="createAppDialogVisible = false">取 消</el-button>
@@ -63,7 +63,7 @@
                         <p>{{ modifyAppInfo.secret }}</p>
                     </el-form-item>
                     <el-form-item label="应用图标地址" :label-width="formLabelWidth" prop="portraitUrl">
-                        <el-input v-model="modifyAppInfo.portraitUrl" autocomplete="off" disabled placeholder="应用图标地址"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.portraitUrl" autocomplete="off" disabled placeholder="应用图标地址"></el-input>
                         <el-upload
                             class="upload-demo"
                             :action="uploadMediaUrl"
@@ -76,21 +76,21 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="应用名称" :label-width="formLabelWidth" prop="name">
-                        <el-input v-model="modifyAppInfo.name" autocomplete="off" placeholder="应用名称"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.name" autocomplete="off" placeholder="应用名称"></el-input>
                     </el-form-item>
                     <el-form-item label="应用描述" :label-width="formLabelWidth" prop="description">
-                        <el-input v-model="modifyAppInfo.description" autocomplete="off" placeholder="应用的一句话描述"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.description" autocomplete="off" placeholder="应用的一句话描述"></el-input>
                     </el-form-item>
                     <el-form-item label="移动端地址" :label-width="formLabelWidth" prop="mobileUrl">
-                        <el-input v-model="modifyAppInfo.mobileUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.mobileUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
                     <el-form-item label="桌面端地址" :label-width="formLabelWidth" prop="desktopUrl">
-                        <el-input v-model="modifyAppInfo.desktopUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.desktopUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
                     <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
-                        <el-input v-model="modifyAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
-                    <el-checkbox label="是否是全局应用" v-model="modifyAppInfo.global"></el-checkbox>
+                    <el-checkbox label="是否是全局应用" v-model.trim="modifyAppInfo.global"></el-checkbox>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modifyAppDialogVisible = false">取 消</el-button>

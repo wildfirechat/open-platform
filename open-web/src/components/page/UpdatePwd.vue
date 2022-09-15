@@ -9,13 +9,13 @@
         <div class="container" style="padding: 20px">
             <el-form :model="user">
                 <el-form-item v-bind:label="$t('setting.original_password')">
-                    <el-input v-model="user.oldPwd" type="password"></el-input>
+                    <el-input v-model.trim="user.oldPwd" type="password"></el-input>
                 </el-form-item>
                 <el-form-item v-bind:label="$t('setting.new_password')">
-                    <el-input v-model="user.newPwd" type="password"></el-input>
+                    <el-input v-model.trim="user.newPwd" type="password"></el-input>
                 </el-form-item>
                 <el-form-item v-bind:label="$t('setting.confirm_new_password')">
-                    <el-input v-model="user.newPwdRe" type="password"></el-input>
+                    <el-input v-model.trim="user.newPwdRe" type="password"></el-input>
                 </el-form-item>
                 <el-button @click="save" :loading="loading">{{ $t('common.save') }}</el-button>
             </el-form>

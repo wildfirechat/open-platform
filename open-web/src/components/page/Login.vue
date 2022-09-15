@@ -6,11 +6,11 @@
                      class="loginForm">
                 <el-form-item prop="username">
                     <span>用户名</span>
-                    <input v-model="loginForm.username" class="input_style user_bg"/>
+                    <input v-model.trim="loginForm.username" class="input_style user_bg"/>
                 </el-form-item>
                 <el-form-item prop="password" class="ps_style">
                     <span>密码</span>
-                    <input type="password" v-model="loginForm.password" @keyup.enter="submitForm('loginForm')"
+                    <input type="password" v-model.trim="loginForm.password" @keyup.enter="submitForm('loginForm')"
                            class="input_style pass_bg"/>
                 </el-form-item>
                 <div class="login-btn">

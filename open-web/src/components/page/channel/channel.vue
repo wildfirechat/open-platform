@@ -19,7 +19,7 @@
             <el-dialog title="创建频道" :visible.sync="createAppDialogVisible">
                 <el-form :model="createAppInfo" :rules="rules" ref="createAppForm">
                     <el-form-item label="频道图标地址" :label-width="formLabelWidth" prop="portraitUrl">
-                        <el-input v-model="createAppInfo.portraitUrl" autocomplete="off" disabled placeholder="频道图标地址"></el-input>
+                        <el-input v-model.trim="createAppInfo.portraitUrl" autocomplete="off" disabled placeholder="频道图标地址"></el-input>
                         <el-upload
                             class="upload-demo"
                             :action="uploadMediaUrl"
@@ -32,15 +32,15 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="频道名称" :label-width="formLabelWidth" prop="name">
-                        <el-input v-model="createAppInfo.name" autocomplete="off" placeholder="频道名称"></el-input>
+                        <el-input v-model.trim="createAppInfo.name" autocomplete="off" placeholder="频道名称"></el-input>
                     </el-form-item>
                     <el-form-item label="频道描述" :label-width="formLabelWidth" prop="description">
-                        <el-input v-model="createAppInfo.description" autocomplete="off" placeholder="频道的一句话描述"></el-input>
+                        <el-input v-model.trim="createAppInfo.description" autocomplete="off" placeholder="频道的一句话描述"></el-input>
                     </el-form-item>
                     <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
-                        <el-input v-model="createAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                        <el-input v-model.trim="createAppInfo.serverUrl" autocomplete="off" placeholder="http://{channel-server/频道服务}"></el-input>
                     </el-form-item>
-                    <el-checkbox label="广播号(默认是订阅号，发送消息时，只给已经订阅了的用户发送；广播号，发送消息时，给所有人发送)" v-model="modifyAppInfo.global"></el-checkbox>
+                    <el-checkbox label="广播号(默认是订阅号，发送消息时，只给已经订阅了的用户发送；广播号，发送消息时，给所有人发送)" v-model.trim="modifyAppInfo.global"></el-checkbox>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="createAppDialogVisible = false">取 消</el-button>
@@ -50,14 +50,14 @@
 
             <el-dialog title="修改频道" :visible.sync="modifyAppDialogVisible">
                 <el-form :model="modifyAppInfo" :rules="rules" ref="modifyAppForm">
-                    <el-form-item label="targetId" :label-width="formLabelWidth">
+                    <el-form-item label="channelId" :label-width="formLabelWidth">
                         <p>{{ modifyAppInfo.targetId }}</p>
                     </el-form-item>
                     <el-form-item label="secret" :label-width="formLabelWidth">
                         <p>{{ modifyAppInfo.secret }}</p>
                     </el-form-item>
                     <el-form-item label="频道图标地址" :label-width="formLabelWidth" prop="portraitUrl">
-                        <el-input v-model="modifyAppInfo.portraitUrl" autocomplete="off" disabled placeholder="频道图标地址"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.portraitUrl" autocomplete="off" disabled placeholder="频道图标地址"></el-input>
                         <el-upload
                             class="upload-demo"
                             :action="uploadMediaUrl"
@@ -70,15 +70,15 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="频道名称" :label-width="formLabelWidth" prop="name">
-                        <el-input v-model="modifyAppInfo.name" autocomplete="off" placeholder="测试频道"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.name" autocomplete="off" placeholder="测试频道"></el-input>
                     </el-form-item>
                     <el-form-item label="频道描述" :label-width="formLabelWidth" prop="description">
-                        <el-input v-model="modifyAppInfo.description" autocomplete="off" placeholder="频道的一句话描述"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.description" autocomplete="off" placeholder="频道的一句话描述"></el-input>
                     </el-form-item>
                     <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
-                        <el-input v-model="modifyAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.serverUrl" autocomplete="off" placeholder="http://{channel-server/频道服务}"></el-input>
                     </el-form-item>
-                    <el-checkbox label="广播号(默认是订阅号，发送消息时，只能给已经订阅了的用户发送；广播号，发送消息时，给所有人发送)" v-model="modifyAppInfo.global"></el-checkbox>
+                    <el-checkbox label="广播号(默认是订阅号，发送消息时，只能给已经订阅了的用户发送；广播号，发送消息时，给所有人发送)" v-model.trim="modifyAppInfo.global"></el-checkbox>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modifyAppDialogVisible = false">取 消</el-button>
