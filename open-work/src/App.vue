@@ -74,11 +74,9 @@ export default {
         getAccount(failToLogin = true) {
             api.getAccount().then(account => {
                 this.account = account;
-                console.log('xxxx account ', account)
-                wf.toast('xxx', JSON.stringify(account));
                 this.getFavAppList();
             }).catch(reason => {
-                wf.toast('yyyy', JSON.stringify(reason))
+                wf.toast('开放平台登录中...')
                 if (reason.code === 13 && failToLogin) {
                     console.log('getAuthCode and login')
                     this.login();
@@ -117,7 +115,7 @@ export default {
                     this.getAccount(false);
                 }).catch(reason => {
                     console.log('login failed', reason);
-                    wf.toast('登录失败 ' + reason);
+                    wf.toast('开放平台登录失败 ' + reason);
                 })
             }, err => {
                 console.log('getAuthCode error', err)
