@@ -47,7 +47,6 @@ public class ShiroConfig {
 
         filterChainDefinitionMap.put("/api/login", "anon");
         filterChainDefinitionMap.put("/api/user_login", "anon");
-        filterChainDefinitionMap.put("/api/account", "perms[user:view]");
         filterChainDefinitionMap.put("/api/application/create", "perms[user:admin]");
         filterChainDefinitionMap.put("/api/application/get/*", "anon");
         filterChainDefinitionMap.put("/api/application/list", "anon");

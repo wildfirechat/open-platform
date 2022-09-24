@@ -206,7 +206,26 @@ public class ServiceImpl implements Service {
     public RestResult getAccount() {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
-            return RestResult.ok(subject.getPrincipal());
+            IMResult<InputOutputUserInfo> userInfoIMResult = null;
+            try {
+                userInfoIMResult = UserAdmin.getUserByUserId((String) (subject.getPrincipal()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            if (userInfoIMResult == null) {
+                LOG.error("getAccount error {}, UserAdmin.getUserByUserId return null", subject.getPrincipal());
+            } else {
+                if (userInfoIMResult.code == 0) {
+                    OutputApplicationUserInfo outputApplicationUserInfo = new OutputApplicationUserInfo();
+                    InputOutputUserInfo userInfo = userInfoIMResult.getResult();
+                    outputApplicationUserInfo.setUserId(userInfo.getUserId());
+                    outputApplicationUserInfo.setDisplayName(userInfo.getDisplayName());
+                    outputApplicationUserInfo.setPortraitUrl(userInfo.getPortrait());
+                    return RestResult.ok(outputApplicationUserInfo);
+                } else {
+                    LOG.error("getAccount error {}, {}", userInfoIMResult.code, userInfoIMResult.msg);
+                }
+            }
         }
         return RestResult.error(ERROR_NOT_EXIST);
     }

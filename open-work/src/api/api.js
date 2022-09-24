@@ -4,6 +4,9 @@ export default {
     async login(params) {
         return axios.post('/user_login', params)
     },
+    async getAccount(){
+        return axios.get('/account')
+    },
     async getAppList() {
         return axios.get('/application/list')
     },

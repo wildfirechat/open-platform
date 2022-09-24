@@ -1,7 +1,8 @@
 <template>
     <div id="app">
         <div class="top">
-            <p>欢迎使用野火IM工作台</p>
+            <p v-if="account">{{'欢迎 ' + account.displayName}}</p>
+            <p v-else>欢迎使用野火IM工作台</p>
         </div>
         <div v-if="!showManageFavApp" class="apps-container">
             <div class="title-action-container">
@@ -55,7 +56,7 @@ export default {
     name: 'App',
     data() {
         return {
-            hasLogin: false,
+            account: null,
             favApps: [],
             apps: [], // 非 globalApps
             globalApps: [],
@@ -67,9 +68,23 @@ export default {
     created() {
         document.title = '野火IM工作台'
         this.getAppList();
-        this.getFavAppList();
+        this.getAccount();
     },
     methods: {
+        getAccount(failToLogin = true) {
+            api.getAccount().then(account => {
+                this.account = account;
+                console.log('xxxx account ', account)
+                wf.toast('xxx', JSON.stringify(account));
+                this.getFavAppList();
+            }).catch(reason => {
+                wf.toast('yyyy', JSON.stringify(reason))
+                if (reason.code === 13 && failToLogin) {
+                    console.log('getAuthCode and login')
+                    this.login();
+                }
+            })
+        },
         getAppList() {
             api.getAppList().then((apps) => {
                 console.log('apps', apps)
@@ -78,21 +93,14 @@ export default {
             });
         },
 
-        getFavAppList(loginOnFail = true) {
+        getFavAppList() {
             api.getFavAppList().then(favApps => {
-                this.hasLogin = true;
                 this.favApps = favApps;
                 this.favApps.forEach(app => {
                     this.checkedAppIds.push(app.targetId);
                 })
             }).catch(reason => {
                 console.log('getFavAppList error', reason)
-                if (reason.code === 13) {
-                    if (loginOnFail) {
-                        console.log('getAuthCode and login')
-                        this.login();
-                    }
-                }
             })
         },
 
@@ -106,6 +114,7 @@ export default {
                     authCode: authCode,
                 }).then(() => {
                     this.getFavAppList(false);
+                    this.getAccount(false);
                 }).catch(reason => {
                     console.log('login failed', reason);
                     wf.toast('登录失败 ' + reason);
@@ -116,7 +125,7 @@ export default {
         },
 
         showManageFavAppView() {
-            if (this.hasLogin) {
+            if (this.account) {
                 this.showManageFavApp = true;
             } else {
                 console.log('not login, to login')
