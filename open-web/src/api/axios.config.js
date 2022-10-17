@@ -26,8 +26,9 @@ instance.interceptors.response.use(response => {
         }
     } else {
         if (response.config.url !== '/login' && code === 13) {
+            localStorage.removeItem('authToken');
             App.$message.error('请先登陆')
-            App.$router.push('/login')
+            App.$router.replace('/login')
         }
         App.$message.error(message);
 
