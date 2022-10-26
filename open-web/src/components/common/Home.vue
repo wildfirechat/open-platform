@@ -26,7 +26,7 @@
                         <el-dropdown-item @click.native="modifyPwdDialogVisible = true">修改密码</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
-                <span>{{ account.portraitUrl }}</span>
+                <span>{{ account.displayName }}</span>
             </el-header>
             <el-main style="padding: 0">
                 <transition name="move" mode="out-in">
