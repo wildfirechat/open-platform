@@ -10,6 +10,9 @@ mvn clean package
 ## 配置
 服务使用外置配置文件，需要把[config](./config)目录放到软件包目录下，然后配置目录下的```application.property```文件。需要正确配置IM服务管理地址和密钥，还有默认使用h2数据库，上线需要迁移到其它关系型数据库。
 
+## 运行
+依赖java环境，执行命令：```nohup java -jar open-platform-server-xxx.jar 2>&1 &```。注意包名要改成正确的文件名。
+
 ## 登陆
 打开后台登陆页面，默认账户/密码为 ```admin/admin123``` 登录以后注意修改默认密码。
 
