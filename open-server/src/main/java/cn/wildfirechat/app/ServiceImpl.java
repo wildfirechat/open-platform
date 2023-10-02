@@ -355,6 +355,11 @@ public class ServiceImpl implements Service {
             suffix = fileName.substring(fileName.lastIndexOf("."));
             prefix = fileName.substring(0, fileName.lastIndexOf("."));
         }
+        if(prefix.length() < 3) {
+            for (int i = 3-prefix.length(); i > 0; i--) {
+                prefix = prefix + "_";
+            }
+        }
         File localFile = File.createTempFile(prefix, suffix);
 
         try {
