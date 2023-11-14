@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <div class="top">
-            <p v-if="account">{{'欢迎 ' + account.displayName}}</p>
+            <p v-if="account">{{ '欢迎 ' + account.displayName }}</p>
             <p v-else>欢迎使用野火IM工作台</p>
         </div>
         <div v-if="!showManageFavApp" class="apps-container">
@@ -51,6 +51,7 @@
 
 import wf from "@/jssdk/wf";
 import api from "@/api/api";
+import './jssdk/bridgeClientImpl.uni'
 
 export default {
     name: 'App',
@@ -236,7 +237,7 @@ body {
     align-items: center;
 }
 
-.title-action-container .action-container{
+.title-action-container .action-container {
     display: flex;
     flex-direction: row;
 }
