@@ -49,9 +49,9 @@
 
 <script>
 
+import './jssdk/bridgeClientImpl.uni'
 import wf from "@/jssdk/wf";
 import api from "@/api/api";
-import './jssdk/bridgeClientImpl.uni'
 
 export default {
     name: 'App',

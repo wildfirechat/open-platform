@@ -66,4 +66,9 @@ function register(handlerName, callback) {
     eventListeners[handlerName] = callback;
 }
 
-init();
+if (uni.postMessage) {
+    console.log('init uni client')
+    init();
+} else {
+   console.log('not init uni client')
+}
