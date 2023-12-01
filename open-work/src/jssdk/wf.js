@@ -8,8 +8,11 @@ export class Wf {
     navigation = new Navigation();
 
     openUrl(url, options) {
-        if (window.__wf_bridge_) {
-            // pc or uniapp
+        if (navigator.userAgent.indexOf('uni-app') >= 0){
+            // uniapp
+            bridge().call('openUrl', url);
+        } else if (window.__wf_bridge_) {
+            // pc or uni
             bridge().call('openUrl', {url, ...options});
         } else {
             // mobile
