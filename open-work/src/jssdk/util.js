@@ -1,3 +1,5 @@
+import {initUniappBridge} from "./bridgeClientImpl.uni";
+
 export function _handleNativeCall(successCB, failCB) {
     return (result) => {
         console.log('native callback result', result);
@@ -17,3 +19,15 @@ export function _handleNativeCall(successCB, failCB) {
         }
     }
 }
+
+export function bridge() {
+    if (navigator.userAgent.indexOf('uni-app') >= 0) {
+        if (!window.__wf_bridge_) {
+            initUniappBridge();
+        }
+        return window.__wf_bridge_;
+    } else {
+        return window.__wf_bridge_ ? window.__wf_bridge_ : require('dsbridge');
+    }
+}
+

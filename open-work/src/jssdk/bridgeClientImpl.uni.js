@@ -9,9 +9,10 @@
 let callbackMap = new Map();
 let eventListeners = {};
 let requestId = 0;
-let client;
 
-function init() {
+let uniappBridgeReady = false;
+
+export function initUniappBridge() {
     window.__messageFromUni = (data) => {
         console.log('__messageFromUni', data)
         let obj;
@@ -36,6 +37,10 @@ function init() {
 }
 
 function call(handlerName, args, callback) {
+    if (!uniappBridgeReady){
+        console.error('uniapp bridge not ready!')
+        return;
+    }
     let reqId = 0;
     if (callback && typeof callback === 'function') {
         reqId = requestId++;
@@ -59,7 +64,6 @@ function handleOpResponse(requestId, args) {
 
 function handleOpEvent(handlerName, args) {
     eventListeners[handlerName] && eventListeners[handlerName](args);
-
 }
 
 function register(handlerName, callback) {
@@ -68,15 +72,16 @@ function register(handlerName, callback) {
 
 console.log('add UniAppJSBridgeReady listener')
 document.addEventListener('UniAppJSBridgeReady', () => {
+    uniappBridgeReady = true;
     console.log('receive UniAppJSBridgeReady event')
     uni.getEnv((res) => {
         console.log('当前环境：' + JSON.stringify(res));
         // web 端 h5: true
-        if (res.nvue){
-            console.log('init uni client')
-            init();
-        }else {
-            console.log('not init uni client')
-        }
+        // if (res.nvue){
+        //     console.log('init uni client')
+        //     init();
+        // }else {
+        //     console.log('not init uni client')
+        // }
     });
 });

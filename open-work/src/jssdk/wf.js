@@ -1,7 +1,7 @@
 import Biz from "./biz";
 import Navigation from "@/jssdk/navigation";
+import {bridge} from "./util";
 
-const bridge = window.__wf_bridge_ ? window.__wf_bridge_ : require('dsbridge');
 
 export class Wf {
     biz = new Biz();
@@ -9,28 +9,28 @@ export class Wf {
 
     openUrl(url, options) {
         if (window.__wf_bridge_) {
-            // pc
-            bridge.call('openUrl', {url, ...options});
+            // pc or uniapp
+            bridge().call('openUrl', {url, ...options});
         } else {
             // mobile
-            bridge.call('openUrl', url);
+            bridge().call('openUrl', url);
         }
     }
 
     ready(callback) {
-        bridge.register('ready', () => {
+        bridge().register('ready', () => {
             callback && callback();
         })
     }
 
     error(callback) {
-        bridge.register('error', (reason) => {
+        bridge().register('error', (reason) => {
             callback && callback(reason);
         })
     }
 
     config(obj) {
-        bridge.call('config', obj)
+        bridge().call('config', obj)
     }
 
     /**
@@ -38,7 +38,7 @@ export class Wf {
      * @param text
      */
     toast(text) {
-        bridge.call('toast', text)
+        bridge().call('toast', text)
     }
 }
 
