@@ -66,9 +66,17 @@ function register(handlerName, callback) {
     eventListeners[handlerName] = callback;
 }
 
-if (uni.postMessage) {
-    console.log('init uni client')
-    init();
-} else {
-   console.log('not init uni client')
-}
+console.log('add UniAppJSBridgeReady listener')
+document.addEventListener('UniAppJSBridgeReady', () => {
+    console.log('receive UniAppJSBridgeReady event')
+    uni.getEnv((res) => {
+        console.log('当前环境：' + JSON.stringify(res));
+        // web 端 h5: true
+        if (res.nvue){
+            console.log('init uni client')
+            init();
+        }else {
+            console.log('not init uni client')
+        }
+    });
+});
