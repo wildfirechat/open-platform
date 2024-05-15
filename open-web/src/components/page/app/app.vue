@@ -19,7 +19,7 @@
             <el-dialog title="创建应用" :visible.sync="createAppDialogVisible">
                 <el-form :model="createAppInfo" :rules="rules" ref="createAppForm">
                     <el-form-item label="应用图标地址" :label-width="formLabelWidth" prop="portraitUrl">
-                        <el-input v-model.trim="createAppInfo.portraitUrl" autocomplete="off" disabled placeholder="应用图标地址"></el-input>
+                        <el-input v-model.trim="createAppInfo.portraitUrl" autocomplete="off" placeholder="应用图标地址"></el-input>
                         <el-upload
                             class="upload-demo"
                             :action="uploadMediaUrl"
@@ -63,7 +63,7 @@
                         <p>{{ modifyAppInfo.secret }}</p>
                     </el-form-item>
                     <el-form-item label="应用图标地址" :label-width="formLabelWidth" prop="portraitUrl">
-                        <el-input v-model.trim="modifyAppInfo.portraitUrl" autocomplete="off" disabled placeholder="应用图标地址"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.portraitUrl" autocomplete="off" placeholder="应用图标地址"></el-input>
                         <el-upload
                             class="upload-demo"
                             :action="uploadMediaUrl"
