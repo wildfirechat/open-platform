@@ -30,7 +30,7 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import io.minio.MinioClient;
-import io.minio.PutObjectOptions;
+import io.minio.PutObjectArgs;
 import io.minio.errors.MinioException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -47,10 +47,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -282,7 +285,7 @@ public class ServiceImpl implements Service {
         inputCreateChannel.setOwner(entity.getTargetId());
         inputCreateChannel.setName(entity.getName());
         inputCreateChannel.setPortrait(entity.getPortraitUrl());
-        if (!StringUtils.isNullOrEmpty(entity.getServerUrl())){
+        if (!StringUtils.isNullOrEmpty(entity.getServerUrl())) {
             inputCreateChannel.setCallback(entity.getServerUrl() + "/" + entity.getTargetId());
         }
         inputCreateChannel.setAuto(1);
@@ -355,8 +358,8 @@ public class ServiceImpl implements Service {
             suffix = fileName.substring(fileName.lastIndexOf("."));
             prefix = fileName.substring(0, fileName.lastIndexOf("."));
         }
-        if(prefix.length() < 3) {
-            for (int i = 3-prefix.length(); i > 0; i--) {
+        if (prefix.length() < 3) {
+            for (int i = 3 - prefix.length(); i > 0; i--) {
                 prefix = prefix + "_";
             }
         }
@@ -420,14 +423,14 @@ public class ServiceImpl implements Service {
             // 关闭OSSClient。
             ossClient.shutdown();
         } else if (ossType == 3) {
-            try {
-                // 使用MinIO服务的URL，端口，Access key和Secret key创建一个MinioClient对象
-//                MinioClient minioClient = new MinioClient("https://play.min.io", "Q3AM3UQ867SPQQA43P2F", "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG");
-                MinioClient minioClient = new MinioClient(ossUrl, ossAccessKey, ossSecretKey);
-
-                // 使用putObject上传一个文件到存储桶中。
-//                minioClient.putObject("asiatrip",fileName, localFile.getAbsolutePath(), new PutObjectOptions(PutObjectOptions.MAX_OBJECT_SIZE, PutObjectOptions.MIN_MULTIPART_SIZE));
-                minioClient.putObject(bucket, fileName, localFile.getAbsolutePath(), new PutObjectOptions(file.getSize(), 0));
+            try (InputStream inputStream = new FileInputStream(localFile);
+                 MinioClient minioClient = new MinioClient.Builder().endpoint(ossUrl).credentials(ossAccessKey, ossSecretKey).build();
+            ) {
+                minioClient.putObject(new PutObjectArgs.Builder()
+                    .bucket(bucket)
+                    .object(fileName)
+                    .stream(inputStream, file.getSize(), 0)
+                    .build());
             } catch (MinioException e) {
                 System.out.println("Error occurred: " + e);
                 return RestResult.error(ERROR_SERVER_ERROR);
