@@ -13,7 +13,7 @@ mvn clean package
 ## 运行
 依赖java环境，执行命令：```nohup java -jar open-platform-server-xxx.jar 2>&1 &```。注意包名要改成正确的文件名。
 
-## 登陆
+## 登录
 打开后台登陆页面，默认账户/密码为 ```admin/admin123``` 登录以后注意修改默认密码。
 
 ## 使用
