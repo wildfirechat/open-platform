@@ -77,7 +77,7 @@ export default {
                 this.account = account;
                 this.getFavAppList();
             }).catch(reason => {
-                wf.toast('开放平台登录中...')
+                wf.toast('开放平台登录中... ，若不需要开放平台功能，请将 Config.java 里面的 WORKSPACE_URL 置为 null')
                 if (reason.code === 13 && failToLogin) {
                     console.log('getAuthCode and login')
                     this.login();
@@ -116,7 +116,11 @@ export default {
                     this.getAccount(false);
                 }).catch(reason => {
                     console.log('login failed', reason);
-                    wf.toast('开放平台登录失败 ' + reason);
+                    if (location.host.indexOf('wildfirechat') >= 0) {
+                        wf.toast('请部署开开放平台服务，或将 Config.java 里面将工作台地址置为 null');
+                    } else {
+                        wf.toast('开放平台登录失败 ' + reason.message);
+                    }
                 })
             }, err => {
                 console.log('getAuthCode error', err)
