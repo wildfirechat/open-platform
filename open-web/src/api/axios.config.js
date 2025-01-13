@@ -3,6 +3,8 @@ import App from '../main'
 // axios实例
 const instance = Axios.create({
     // 针对实际情况进行修改
+    // 如果是默认部署方式，即前后端部署在同一个服务器上，保持原样即可
+    // 如果前后端分开部署，需要修改为后端服务器地址
     baseURL: './api',
     withCredentials: true,
     headers: {
