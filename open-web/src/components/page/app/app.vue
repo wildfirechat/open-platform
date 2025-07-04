@@ -88,7 +88,7 @@
                         <el-input v-model.trim="modifyAppInfo.desktopUrl" autocomplete="off" placeholder="https://wildfirechat.cn/desktop"></el-input>
                     </el-form-item>
                     <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
-                        <el-input v-model.trim="modifyAppInfo.serverUrl" autocomplete="off" placeholder="如果不配置的话，工作台应用不能正常登录"></el-input>
+                        <el-input v-model.trim="modifyAppInfo.serverUrl" autocomplete="off" placeholder="如果不配置的话，需要认证的工作台应用，将不能正常登录"></el-input>
                     </el-form-item>
                     <el-checkbox label="是否是全局应用" v-model.trim="modifyAppInfo.global"></el-checkbox>
                 </el-form>
