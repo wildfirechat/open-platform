@@ -38,10 +38,10 @@
                         <el-input v-model.trim="createAppInfo.description" autocomplete="off" placeholder="应用的一句话描述"></el-input>
                     </el-form-item>
                     <el-form-item label="移动端地址" :label-width="formLabelWidth" prop="mobileUrl">
-                        <el-input v-model.trim="createAppInfo.mobileUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                        <el-input v-model.trim="createAppInfo.mobileUrl" autocomplete="off" placeholder="https://wildfirechat.cn, Host 要求和回调地址对应 Host 一致!"></el-input>
                     </el-form-item>
                     <el-form-item label="桌面端地址" :label-width="formLabelWidth" prop="desktopUrl">
-                        <el-input v-model.trim="createAppInfo.desktopUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
+                        <el-input v-model.trim="createAppInfo.desktopUrl" autocomplete="off" placeholder="https://wildfirechat.cn, Host 要求和回调地址对应 Host 一致!"></el-input>
                     </el-form-item>
                     <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
                         <el-input v-model.trim="createAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
