@@ -351,18 +351,16 @@ public class ServiceImpl implements Service {
 
     @Override
     public RestResult uploadMedia(MultipartFile file) throws Exception {
-        String fileName = file.getOriginalFilename();
+        if(ossType == -1){
+            return RestResult.error(ERROR_CODE_NOT_CONFIG_OSS);
+        }
+        String originalFilename = file.getOriginalFilename();
         String suffix = "";
-        String prefix = fileName;
-        if (fileName.contains(".")) {
-            suffix = fileName.substring(fileName.lastIndexOf("."));
-            prefix = fileName.substring(0, fileName.lastIndexOf("."));
+        String prefix = UUID.randomUUID().toString();
+        if (originalFilename != null && originalFilename.contains(".")) {
+            suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
         }
-        if (prefix.length() < 3) {
-            for (int i = 3 - prefix.length(); i > 0; i--) {
-                prefix = prefix + "_";
-            }
-        }
+        String fileName = prefix + suffix;
         File localFile = File.createTempFile(prefix, suffix);
 
         try {
