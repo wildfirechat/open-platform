@@ -28,7 +28,7 @@
                             :before-upload="beforePortraitUpload"
                             :show-file-list="false">
                             <el-button size="small" type="primary" style="margin-top: 8px">点击上传</el-button>
-                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                            <div slot="tip" class="el-upload__tip">需要先配置 oss，只能上传jpg/png文件，且不超过500kb</div>
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="机器人名称" :label-width="formLabelWidth" prop="name">
@@ -65,7 +65,7 @@
                             :before-upload="beforePortraitUpload"
                             :show-file-list="false">
                             <el-button size="small" type="primary" style="margin-top: 8px">点击上传</el-button>
-                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                            <div slot="tip" class="el-upload__tip">需要先配置 oss，只能上传jpg/png文件，且不超过500kb</div>
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="机器人名称" :label-width="formLabelWidth" prop="name">
