@@ -138,7 +138,7 @@ export default {
 
         openApp(app) {
             let url = process ? app.desktopUrl : app.mobileUrl;
-            wf.openUrl(url);
+            wf.openUrl(url, {name: app.name});
         },
 
         checkApp(app) {
