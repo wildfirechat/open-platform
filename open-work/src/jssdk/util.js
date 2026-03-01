@@ -1,4 +1,5 @@
 import {initUniappBridge} from "./bridgeClientImpl.uni";
+import { initWeb } from './bridgeClientImpl.web';
 
 export function _handleNativeCall(successCB, failCB) {
     return (result) => {
@@ -21,6 +22,16 @@ export function _handleNativeCall(successCB, failCB) {
 }
 
 export function bridge() {
+    // for web
+    if (navigator.userAgentData) {
+        const isMobile = navigator.userAgentData.mobile;
+        if(!isMobile) {
+            if (!window.__wf_bridge_) {
+                initWeb();
+            }
+            return window.__wf_bridge_;
+        }
+    }
     if (navigator.userAgent.indexOf('uni-app') >= 0) {
         if (!window.__wf_bridge_) {
             initUniappBridge();
