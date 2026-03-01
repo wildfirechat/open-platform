@@ -42,6 +42,11 @@ export function initWeb() {
     });
 
     initialized = true;
+
+    window.__wf_bridge_ = {
+        call: call,
+        register: register,
+    };
     console.log('bridgeClientImpl init');
 }
 
@@ -79,10 +84,3 @@ function handleOpEvent(handlerName, args) {
 function register(handlerName, callback) {
     eventListeners[handlerName] = callback;
 }
-
-window.__wf_bridge_ = {
-    call: call,
-    register: register,
-};
-
-console.log('export call and register');
