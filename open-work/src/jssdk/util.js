@@ -24,8 +24,8 @@ export function _handleNativeCall(successCB, failCB) {
 export function bridge() {
     // for pc
     // preload
-    if(window.__wf_bridge_){
-        console.log('init bridge, electron')
+    if(process && process.versions && process.versions.electron){
+        console.log('js bridge, electron')
         return  window.__wf_bridge_;
     }
 
@@ -36,20 +36,20 @@ export function bridge() {
             if (!window.__wf_bridge_) {
                 initWeb();
             }
-            console.log('init bridge, electron')
+            console.log('js bridge, web')
             return window.__wf_bridge_;
         }
     }
 
     // uniapp
     if (navigator.userAgent.indexOf('uni-app') >= 0) {
-        console.log('init bridge, uniapp')
+        console.log('js bridge, uni-app')
         if (!window.__wf_bridge_) {
             initUniappBridge();
         }
         return window.__wf_bridge_;
     } else {
-        console.log('init bridge, dsbridge')
+        console.log('js bridge, dsbridge')
         return require('dsbridge');
     }
 }
