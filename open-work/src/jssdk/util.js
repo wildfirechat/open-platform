@@ -24,6 +24,8 @@ export function _handleNativeCall(successCB, failCB) {
 export function bridge() {
     // for pc
     // preload
+    console.log('init bridge-');
+    console.log('userAgent', navigator.userAgent);
     if(process && process.versions && process.versions.electron){
         console.log('js bridge, electron')
         return  window.__wf_bridge_;
@@ -31,7 +33,8 @@ export function bridge() {
 
     // for web
     if (navigator.userAgentData) {
-        const isMobile = navigator.userAgentData.mobile;
+        console.log('userAgentData', JSON.stringify(navigator.userAgentData));
+        const isMobile = navigator.userAgentData.mobile || navigator.userAgent.indexOf('Phone') > -1;
         if(!isMobile) {
             if (!window.__wf_bridge_) {
                 initWeb();
