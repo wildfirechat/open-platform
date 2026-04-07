@@ -68,10 +68,20 @@ export default {
     components: {},
     created() {
         document.title = '野火IM工作台'
+        this.detectTheme();
         this.getAppList();
         this.getAccount();
     },
     methods: {
+        detectTheme() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const theme = urlParams.get('theme');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else if (theme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        },
         getAccount(failToLogin = true) {
             api.getAccount().then(account => {
                 this.account = account;
@@ -190,6 +200,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
+@import "./assets/theme.css";
 @import "./assets/main.css";
 
 body {
@@ -202,11 +213,10 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
-    background-color: #EDEDED;
+    color: var(--text-color-primary);
+    background-color: var(--bg-color-main);
     width: 100vw;
     height: 100vh;
-
 }
 
 .top {
@@ -215,7 +225,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    background-color: white;
+    background-color: var(--bg-color-top);
 }
 
 .top p {
@@ -225,7 +235,7 @@ body {
 }
 
 .apps-container {
-    background-color: white;
+    background-color: var(--bg-color-container);
     border-radius: 5px;
     margin: 5px;
 }
@@ -249,15 +259,17 @@ body {
 .title-action-container .action {
     padding: 5px 10px;
     border-radius: 5px;
+    color: var(--link-color);
 }
 
 .title-action-container .action:active {
-    background-color: lightgrey;
+    background-color: var(--action-bg-active);
 }
 
 .apps-container .empty {
     padding: 10px 0;
     font-size: 14px;
+    color: var(--empty-text-color);
 }
 
 .apps {
@@ -278,7 +290,12 @@ body {
 }
 
 .app:active {
-    background-color: lightgrey;
+    background-color: var(--action-bg-active);
+    border-radius: 5px;
+}
+
+.app.checked {
+    background-color: var(--action-bg-active);
     border-radius: 5px;
 }
 
@@ -290,6 +307,7 @@ body {
 .app p {
     margin: 5px 0 0 0;
     font-size: 12px;
+    color: var(--text-color-primary);
 }
 
 .app input {

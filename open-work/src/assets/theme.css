@@ -1,0 +1,62 @@
+:root {
+    --bg-color-main: #EDEDED;
+    --bg-color-container: #FFFFFF;
+    --bg-color-top: #FFFFFF;
+    --text-color-primary: #2c3e50;
+    --text-color-secondary: #5e6e7d;
+    --action-bg-active: lightgrey;
+    --border-color: #DDDDDD;
+    --link-color: #409EFF;
+    --empty-text-color: #999999;
+    --scrollbar-bg: #F5F5F5;
+    --scrollbar-thumb: #CCCCCC;
+    --scrollbar-track: #FFFFFF;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color-main: #121212;
+        --bg-color-container: #1E1E1E;
+        --bg-color-top: #1E1E1E;
+        --text-color-primary: #E0E0E0;
+        --text-color-secondary: #B0B0B0;
+        --action-bg-active: #333333;
+        --border-color: #333333;
+        --link-color: #66B1FF;
+        --empty-text-color: #777777;
+        --scrollbar-bg: #1A1A1A;
+        --scrollbar-thumb: #444444;
+        --scrollbar-track: #121212;
+    }
+}
+
+/* Optional: manually trigger theme mode */
+[data-theme='dark'] {
+    --bg-color-main: #121212;
+    --bg-color-container: #1E1E1E;
+    --bg-color-top: #1E1E1E;
+    --text-color-primary: #E0E0E0;
+    --text-color-secondary: #B0B0B0;
+    --action-bg-active: #333333;
+    --border-color: #333333;
+    --link-color: #66B1FF;
+    --empty-text-color: #777777;
+    --scrollbar-bg: #1A1A1A;
+    --scrollbar-thumb: #444444;
+    --scrollbar-track: #121212;
+}
+
+[data-theme='light'] {
+    --bg-color-main: #EDEDED;
+    --bg-color-container: #FFFFFF;
+    --bg-color-top: #FFFFFF;
+    --text-color-primary: #2c3e50;
+    --text-color-secondary: #5e6e7d;
+    --action-bg-active: lightgrey;
+    --border-color: #DDDDDD;
+    --link-color: #409EFF;
+    --empty-text-color: #999999;
+    --scrollbar-bg: #F5F5F5;
+    --scrollbar-thumb: #CCCCCC;
+    --scrollbar-track: #FFFFFF;
+}
