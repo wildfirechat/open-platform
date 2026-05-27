@@ -331,8 +331,14 @@ public class ServiceImpl implements Service {
         ApplicationEntity entity = convertApplicationPojo(pojoApplicationEntity);
         applicationEntityRepository.save(entity);
 
-        createRobotByApplicationEntity(entity);
-        createChannelByApplicationEntity(entity);
+        if (entity.getType() == 0) {
+            createRobotByApplicationEntity(entity);
+            createChannelByApplicationEntity(entity);
+        } else if (entity.getType() == 1) {
+            createChannelByApplicationEntity(entity);
+        } else if (entity.getType() == 2) {
+            createRobotByApplicationEntity(entity);
+        }
 
         return RestResult.ok(pojoApplicationEntity);
     }
