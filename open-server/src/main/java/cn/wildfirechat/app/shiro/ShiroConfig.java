@@ -47,11 +47,16 @@ public class ShiroConfig {
 
         filterChainDefinitionMap.put("/api/login", "anon");
         filterChainDefinitionMap.put("/api/user_login", "anon");
+
+        // 应用管理相关的写操作接口限制为 admin 权限
         filterChainDefinitionMap.put("/api/application/create", "perms[user:admin]");
-        filterChainDefinitionMap.put("/api/application/get/*", "anon");
-        filterChainDefinitionMap.put("/api/application/list", "anon");
-        filterChainDefinitionMap.put("/api/application/del", "perms[user:admin]");
         filterChainDefinitionMap.put("/api/application/update", "perms[user:admin]");
+        filterChainDefinitionMap.put("/api/application/del/**", "perms[user:admin]");
+        filterChainDefinitionMap.put("/api/application/media/upload", "perms[user:admin]");
+
+        // 只读接口允许匿名访问
+        filterChainDefinitionMap.put("/api/application/get/**", "anon");
+        filterChainDefinitionMap.put("/api/application/list", "anon");
         filterChainDefinitionMap.put("/api/application/list_global", "anon");
         filterChainDefinitionMap.put("/api/application/list_foreground", "anon");
         filterChainDefinitionMap.put("/api/application/list_background", "perms[user:admin]");
