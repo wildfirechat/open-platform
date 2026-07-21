@@ -40,6 +40,64 @@ config是IM验证页面合法性的方法。页面去后台获取config签名，
 ## 启动
 请参考[open-server](./open-server)说明。
 
+## Nginx 反向代理与 IP 白名单
+默认打包部署时，open-server API、open-web 管理后台和 open-work 工作页面都跑在同一个端口（`8880`）上。如果希望对管理后台做 IP 白名单控制，推荐在前面加一层 Nginx 反向代理，通过 `allow/deny` 限制访问来源。
+
+### 1. 绑定后端到本地（可选但推荐）
+在 `open-server/config/application.properties` 中把服务绑定到 `127.0.0.1`，避免外网直接访问 8880 端口：
+
+```properties
+server.address=127.0.0.1
+```
+
+### 2. Nginx 配置示例
+以下配置仅允许 `10.0.0.0/24` 和 `192.168.1.100` 访问管理后台（`/`），work 页面和 API 保持公开可访问：
+
+```nginx
+server {
+    listen 80;
+    server_name open.example.com;
+
+    # 管理后台：仅允许指定 IP
+    location / {
+        allow 10.0.0.0/24;
+        allow 192.168.1.100;
+        deny all;
+
+        proxy_pass http://127.0.0.1:8880;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    # work 页面：客户端工作平台，通常保持公开
+    location /work.html {
+        proxy_pass http://127.0.0.1:8880/work.html;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    # API 接口：根据业务需要决定是否加白名单
+    location /api/ {
+        proxy_pass http://127.0.0.1:8880/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+```
+
+### 3. 验证配置
+修改 Nginx 配置后重载：
+
+```bash
+nginx -t
+nginx -s reload
+```
+
+注意：如果 Nginx 和 open-server 之间还有 SLB、CDN 等代理，`$remote_addr` 会是代理的地址，此时应改用 `$http_x_forwarded_for` 做限制，或在最外层代理上设置真实 IP 模块。
+
 ## 截图
 
 应用列表
