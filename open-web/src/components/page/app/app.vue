@@ -43,10 +43,11 @@
                     <el-form-item label="桌面端地址" :label-width="formLabelWidth" prop="desktopUrl">
                         <el-input v-model.trim="createAppInfo.desktopUrl" autocomplete="off" placeholder="https://wildfirechat.cn, Host 要求和回调地址对应 Host 一致!"></el-input>
                     </el-form-item>
-                    <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
+                    <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl" :rules="webOnly ? [] : rules.serverUrl">
                         <el-input v-model.trim="createAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
                     <el-checkbox label="是否是全局应用" v-model.trim="createAppInfo.global"></el-checkbox>
+                    <el-checkbox label="仅网页应用（不创建频道和机器人）" v-model="webOnly"></el-checkbox>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="createAppDialogVisible = false">取 消</el-button>
@@ -87,10 +88,11 @@
                     <el-form-item label="桌面端地址" :label-width="formLabelWidth" prop="desktopUrl">
                         <el-input v-model.trim="modifyAppInfo.desktopUrl" autocomplete="off" placeholder="https://wildfirechat.cn/desktop"></el-input>
                     </el-form-item>
-                    <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl">
+                    <el-form-item label="回调/服务端地址" :label-width="formLabelWidth" prop="serverUrl" :rules="modifyWebOnly ? [] : rules.serverUrl">
                         <el-input v-model.trim="modifyAppInfo.serverUrl" autocomplete="off" placeholder="如果不配置的话，需要认证的工作台应用，将不能正常登录"></el-input>
                     </el-form-item>
                     <el-checkbox label="是否是全局应用" v-model.trim="modifyAppInfo.global"></el-checkbox>
+                    <el-checkbox label="仅网页应用（不创建频道和机器人）" v-model="modifyWebOnly"></el-checkbox>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modifyAppDialogVisible = false">取 消</el-button>
@@ -116,6 +118,8 @@ export default {
             modifyAppDialogVisible: false,
             createAppInfo: new AppInfo(0),
             modifyAppInfo: new AppInfo(0),
+            webOnly: false,
+            modifyWebOnly: false,
             formLabelWidth: '140px',
             uploadMediaUrl: '/api/application/media/upload/',
             // 本地调试
@@ -151,8 +155,10 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.createAppDialogVisible = false;
+                    this.createAppInfo.type = this.webOnly ? 3 : 0;
                     this.$store.dispatch('createApp', this.createAppInfo);
                     this.createAppInfo = new AppInfo(0);
+                    this.webOnly = false;
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -161,14 +167,17 @@ export default {
         },
         showAppInfo(app) {
             this.modifyAppInfo = app;
+            this.modifyWebOnly = app.type === 3;
             this.modifyAppDialogVisible = true;
         },
         updateApp(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.modifyAppDialogVisible = false;
+                    this.modifyAppInfo.type = this.modifyWebOnly ? 3 : 0;
                     this.$store.dispatch('updateApp', this.modifyAppInfo);
                     this.modifyAppInfo = new AppInfo(0);
+                    this.modifyWebOnly = false;
                 } else {
                     console.log('error submit!!');
                     return false;

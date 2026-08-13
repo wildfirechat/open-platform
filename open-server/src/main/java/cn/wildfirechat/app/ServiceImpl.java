@@ -258,6 +258,8 @@ public class ServiceImpl implements Service {
             createChannelByApplicationEntity(entity);
         } else if (entity.getType() == 2) {
             createRobotByApplicationEntity(entity);
+        } else if (entity.getType() == 3) {
+            // web application only, no channel or robot
         } else {
             return RestResult.error(ERROR_CODE_APPLICATION_TYPE_INVALID);
         }
@@ -350,8 +352,13 @@ public class ServiceImpl implements Service {
             return RestResult.error(ERROR_NOT_EXIST);
         }
         applicationEntityRepository.delete(optionalApplicationEntity.get());
-        GeneralAdmin.destroyChannel(optionalApplicationEntity.get().getTargetId());
-        UserAdmin.destroyRobot(optionalApplicationEntity.get().getTargetId());
+        int type = optionalApplicationEntity.get().getType();
+        if (type == 0 || type == 1) {
+            GeneralAdmin.destroyChannel(optionalApplicationEntity.get().getTargetId());
+        }
+        if (type == 0 || type == 2) {
+            UserAdmin.destroyRobot(optionalApplicationEntity.get().getTargetId());
+        }
         return RestResult.ok(null);
     }
 
@@ -509,12 +516,13 @@ public class ServiceImpl implements Service {
         Subject subject = SecurityUtils.getSubject();
         boolean fullInfo = subject.isAuthenticated() && subject.isPermitted("user:admin");
 
-        if (type < -1 || type > 2) {
+        if (type < -1 || type > 3) {
             return RestResult.error(ERROR_CODE_APPLICATION_TYPE_INVALID);
         }
         List<PojoApplicationEntity> list = new ArrayList<>();
         applicationEntityRepository.findAll().forEach(entity -> {
-            if (type == -1 || entity.getType() == type) {
+            // type 0(应用)查询时，同时返回 type 3(纯网页应用)，二者都会展示在客户端工作台
+            if (type == -1 || entity.getType() == type || (type == 0 && entity.getType() == 3)) {
                 list.add(convertApplicationEntity(entity, fullInfo));
             }
         });

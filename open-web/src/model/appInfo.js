@@ -15,7 +15,7 @@ export default class AppInfo {
     serverUrl = '';
     // 应用时，表示是否是全局应用；频道是，表示是否是广播号
     global = false;
-    type = 0; // 0， 创建应用；1，创建频道；2，创建机器人
+    type = 0; // 0， 创建应用；1，创建频道；2，创建机器人；3，创建纯网页应用（不创建频道和机器人）
     updateDt = 0;
     createDt = 0;
 }
