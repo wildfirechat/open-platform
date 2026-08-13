@@ -380,14 +380,22 @@ public class ServiceImpl implements Service {
             file.transferTo(localFile);
         } catch (IOException e) {
             e.printStackTrace();
+            localFile.delete();
             return RestResult.error(ERROR_SERVER_ERROR);
+        }
+
+        //限制只能上传图片
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            localFile.delete();
+            return RestResult.result(ERROR_INVALID_PARAMETER, "只能上传图片文件");
         }
 
         String bucket = ossBucket;
         String bucketDomain = ossBucketDomain;
 
 
-        String url = bucketDomain + "/" + fileName;
+        String url = buildMediaUrl(bucketDomain, fileName);
         if (ossType == 1) {
             //构造一个带指定 Region 对象的配置类
             Configuration cfg = new Configuration(Region.region0());
@@ -453,7 +461,8 @@ public class ServiceImpl implements Service {
                 return RestResult.error(ERROR_SERVER_ERROR);
             }
         } else if (ossType == 4) {
-            //Todo 需要把文件上传到文件服务器。
+            localFile.delete();
+            return RestResult.error(ERROR_SERVER_NOT_IMPLEMENT);
         } else if (ossType == 5) {
             COSCredentials cred = new BasicCOSCredentials(ossAccessKey, ossSecretKey);
             ClientConfig clientConfig = new ClientConfig();
@@ -484,12 +493,26 @@ public class ServiceImpl implements Service {
             } finally {
                 cosClient.shutdown();
             }
+        } else {
+            localFile.delete();
+            return RestResult.error(ERROR_CODE_NOT_CONFIG_OSS);
         }
 
         UploadFileResponse response = new UploadFileResponse();
         response.setUrl(url);
         localFile.delete();
         return RestResult.ok(response);
+    }
+
+    //拼接 bucketDomain 和文件名，避免重复斜杠
+    private String buildMediaUrl(String bucketDomain, String fileName) {
+        if (bucketDomain == null) {
+            bucketDomain = "";
+        }
+        if (bucketDomain.endsWith("/")) {
+            return bucketDomain + fileName;
+        }
+        return bucketDomain + "/" + fileName;
     }
 
     @Override
