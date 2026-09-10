@@ -1,149 +1,174 @@
-/*
- * 设计令牌（Design Tokens）
- * ---------------------------------------------------------------------------
- * 这里是整个开放平台后台唯一的视觉真相来源。组件里不要再出现字面量颜色、
- * 阴影和圆角，一律引用本文件的变量；需要调整主题时只改这一个文件。
- *
- * 品牌色取自野火的火焰标识本身（#4763DC），而不是 Element Plus 默认的
- * #409EFF。所有中性色都落在同一个色相（229°）上并压低饱和度，这样界面里
- * 不会出现"蓝色主色 + 灰色边框"这种色温打架的情况。
- */
+/* ==========================================================================
+   野火开放平台后台 —— 设计系统
+   与 organization-web / wildfire_admin 保持同一套设计语言：
+   蓝色品牌色 + 深色侧边栏 + 无边框卡片。
+   变量命名与 organization-web/src/assets/css/theme.css 一致，两个后台之间
+   可以直接互相复用组件；调整主题只改这一个文件。
+   ========================================================================== */
 
 :root {
-    /* ---- 品牌色阶：由 #4763DC 派生 ---------------------------------- */
-    --wf-brand-50: #EDF0FC;
-    --wf-brand-100: #D8DEF9;
-    --wf-brand-200: #B1BDF1;
-    --wf-brand-300: #8799E8;
-    --wf-brand-400: #5E76DE;
-    --wf-brand-500: #4763DC; /* 品牌基准色 */
-    --wf-brand-600: #2F4BC6;
-    --wf-brand-700: #293E99;
-    --wf-brand-800: #22306D;
+    /* 品牌色 */
+    --wf-brand: #165dff;
+    --wf-brand-hover: #4080ff;
+    --wf-brand-active: #0e42d2;
+    --wf-brand-bg: #e8f3ff;
+    /* 本项目额外需要的一档浅描边（卡片 hover），取 Element primary-light-7 */
+    --wf-brand-border: #b9ceff;
 
-    /* ---- 中性色阶：同色相低饱和，保证整体色温一致 -------------------- */
-    --wf-ink-0: #FFFFFF;
-    --wf-ink-25: #FAFAFC;
-    --wf-ink-50: #F4F5F8;
-    --wf-ink-100: #E9EBF1;
-    --wf-ink-200: #D8DAE4;
-    --wf-ink-300: #BEC2CF;
-    --wf-ink-400: #979CAF;
-    --wf-ink-500: #70768F;
-    --wf-ink-600: #575B70;
-    --wf-ink-700: #3A3E50;
-    --wf-ink-800: #232634;
-    --wf-ink-900: #151823;
+    /* 语义色 */
+    --wf-success: #00b42a;
+    --wf-warning: #ff7d00;
+    --wf-danger: #f53f3f;
 
-    /* ---- 语义色：整套界面里唯一的暖色只用于「删除」 ------------------ */
-    --wf-danger: #D4453F;
-    --wf-danger-weak: #FCEDEC;
-    --wf-success: #2E9E68;
-    --wf-warning: #C2831B;
+    /* 文本 */
+    --wf-text-1: #1d2129;
+    --wf-text-2: #4e5969;
+    --wf-text-3: #86909c;
+    --wf-text-4: #c9cdd4;
 
-    /* ---- 语义化别名：组件应该引用这一层，而不是上面的色阶 ------------ */
-    --wf-canvas: var(--wf-ink-50);
-    --wf-surface: var(--wf-ink-0);
-    --wf-surface-sunken: var(--wf-ink-25);
-    --wf-rail: var(--wf-ink-900);
-    --wf-rail-hover: rgba(255, 255, 255, 0.06);
+    /* 描边与填充 */
+    --wf-border: #e5e6eb;
+    --wf-border-light: #f2f3f5;
+    --wf-fill: #f7f8fa;
+    --wf-surface: #ffffff;
+    --wf-bg: #f2f3f5;
 
-    --wf-text: var(--wf-ink-800);
-    --wf-text-muted: var(--wf-ink-500);
-    --wf-text-faint: var(--wf-ink-400);
-    --wf-text-on-brand: #FFFFFF;
+    /* 侧边栏（深色） */
+    --wf-nav-bg: #1d2129;
+    --wf-nav-sub-bg: #17191e;
+    --wf-nav-text: #a9aeb8;
+    --wf-nav-border: rgba(255, 255, 255, 0.08);
 
-    --wf-border: var(--wf-ink-200);
-    --wf-border-subtle: var(--wf-ink-100);
-    --wf-border-strong: var(--wf-ink-300);
+    /* 圆角 */
+    --wf-radius-sm: 4px;
+    --wf-radius: 6px;
+    --wf-radius-lg: 8px;
+    --wf-radius-pill: 999px;
 
-    /* ---- 圆角：按角色区分，而不是全站一个值 ------------------------- */
-    --wf-radius-control: 6px;  /* 按钮、输入框 */
-    --wf-radius-card: 10px;    /* 卡片、面板 */
-    --wf-radius-sheet: 14px;   /* 对话框 */
-    --wf-radius-pill: 999px;   /* 标签 */
+    /* 阴影 */
+    --wf-shadow-sm: 0 1px 2px rgba(29, 33, 41, 0.06);
+    --wf-shadow: 0 2px 8px rgba(29, 33, 41, 0.08);
+    --wf-shadow-lg: 0 4px 16px rgba(29, 33, 41, 0.1);
 
-    /* ---- 阴影：只有两级，并且带品牌色相，不用中性黑 ------------------ */
-    --wf-shadow-raised: 0 1px 2px rgba(21, 24, 35, 0.05), 0 1px 3px rgba(21, 24, 35, 0.04);
-    --wf-shadow-float: 0 4px 12px rgba(21, 24, 35, 0.08), 0 12px 32px rgba(21, 24, 35, 0.08);
-    --wf-focus-ring: 0 0 0 3px rgba(71, 99, 220, 0.28);
+    /* 布局尺寸 */
+    --wf-sider-w: 224px;
+    --wf-sider-w-collapsed: 64px;
+    --wf-header-h: 56px;
 
-    /* ---- 间距节奏：4px 基准 ---------------------------------------- */
+    /* 间距节奏：4px 基准 */
     --wf-space-1: 4px;
     --wf-space-2: 8px;
     --wf-space-3: 12px;
     --wf-space-4: 16px;
-    --wf-space-5: 24px;
-    --wf-space-6: 32px;
-    --wf-space-7: 48px;
+    --wf-space-5: 20px;
+    --wf-space-6: 24px;
+    --wf-space-7: 32px;
 
-    /* ---- 字体 ------------------------------------------------------
-     * 面向中文用户的私有化部署后台，不加载 Web Font：中文字体包体积过大，
-     * 而且内网环境下 CDN 往往不可达。系统字体栈在这里是正确选择。
-     */
-    --wf-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
-        "HarmonyOS Sans SC", "Source Han Sans SC", "Noto Sans SC", "Hiragino Sans GB",
-        "Microsoft YaHei", sans-serif;
-    /* 等宽字体只用于真正的机器标识：targetId、secret、URL */
-    --wf-font-mono: ui-monospace, SFMono-Regular, "SF Mono", "JetBrains Mono",
-        Menlo, Consolas, "Liberation Mono", monospace;
-
+    /* 字号 */
     --wf-text-xs: 12px;
     --wf-text-sm: 13px;
     --wf-text-base: 14px;
     --wf-text-md: 16px;
-    --wf-text-lg: 20px;
-    --wf-text-xl: 28px;
+    --wf-text-lg: 18px;
+    --wf-text-xl: 20px;
 
-    --wf-rail-width: 232px;
-    --wf-header-height: 64px;
+    --wf-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+        'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    /* 等宽字体只用于真正的机器标识：targetId、secret、URL */
+    --wf-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', 'JetBrains Mono',
+        Menlo, Consolas, 'Liberation Mono', monospace;
 
-    /* ---- 资源类型色：卡片顶部色条用它编码类型，属于信息而非装饰 ------ */
-    --wf-type-app: #4763DC;
-    --wf-type-web: #6E85E4;
-    --wf-type-channel: #2E9E68;
-    --wf-type-robot: #C2831B;
+    /* 资源类型色：不同页面的图标占位与标签用它区分应用 / 频道 / 机器人 */
+    --wf-type-app: var(--wf-brand);
+    --wf-type-web: var(--wf-brand-hover);
+    --wf-type-channel: var(--wf-success);
+    --wf-type-robot: var(--wf-warning);
 }
 
-/*
- * Element Plus 主题接入
- * ---------------------------------------------------------------------------
- * 覆盖 Element Plus 自己的 CSS 变量，让所有 el-* 组件自动继承上面的令牌，
- * 而不是在每个组件里用 !important 去对抗它。
- */
+/* --------------------------------------------------------------------------
+   Element Plus 主题变量覆盖
+   项目用的是 vue-cli，没有 sass，所以不改 SCSS 变量，直接覆盖运行时 CSS 变量
+   -------------------------------------------------------------------------- */
 :root {
-    --el-color-primary: var(--wf-brand-500);
-    --el-color-primary-light-3: var(--wf-brand-400);
-    --el-color-primary-light-5: var(--wf-brand-300);
-    --el-color-primary-light-7: var(--wf-brand-200);
-    --el-color-primary-light-8: var(--wf-brand-100);
-    --el-color-primary-light-9: var(--wf-brand-50);
-    --el-color-primary-dark-2: var(--wf-brand-600);
+    --el-color-primary: #165dff;
+    --el-color-primary-light-3: #5c8eff;
+    --el-color-primary-light-5: #8baeff;
+    --el-color-primary-light-7: #b9ceff;
+    --el-color-primary-light-8: #d0dfff;
+    --el-color-primary-light-9: #e8efff;
+    --el-color-primary-dark-2: #124acc;
 
-    --el-color-danger: var(--wf-danger);
-    --el-color-danger-light-9: var(--wf-danger-weak);
-    --el-color-success: var(--wf-success);
-    --el-color-warning: var(--wf-warning);
+    --el-color-success: #00b42a;
+    --el-color-success-light-3: #4dcb6a;
+    --el-color-success-light-5: #80da95;
+    --el-color-success-light-7: #b3e9bf;
+    --el-color-success-light-8: #ccf0d4;
+    --el-color-success-light-9: #e6f8ea;
+    --el-color-success-dark-2: #009022;
 
-    --el-text-color-primary: var(--wf-text);
-    --el-text-color-regular: var(--wf-ink-600);
-    --el-text-color-secondary: var(--wf-text-muted);
-    --el-text-color-placeholder: var(--wf-text-faint);
+    --el-color-warning: #ff7d00;
+    --el-color-warning-light-3: #ffa44d;
+    --el-color-warning-light-5: #ffbe80;
+    --el-color-warning-light-7: #ffd8b3;
+    --el-color-warning-light-8: #ffe5cc;
+    --el-color-warning-light-9: #fff2e6;
+    --el-color-warning-dark-2: #cc6400;
 
-    --el-border-color: var(--wf-border);
-    --el-border-color-light: var(--wf-border-subtle);
-    --el-border-color-lighter: var(--wf-border-subtle);
-    --el-border-color-hover: var(--wf-border-strong);
+    --el-color-danger: #f53f3f;
+    --el-color-danger-light-3: #f87979;
+    --el-color-danger-light-5: #fa9f9f;
+    --el-color-danger-light-7: #fcc5c5;
+    --el-color-danger-light-8: #fdd9d9;
+    --el-color-danger-light-9: #feecec;
+    --el-color-danger-dark-2: #c43232;
 
-    --el-fill-color-blank: var(--wf-surface);
-    --el-fill-color-light: var(--wf-ink-50);
-    --el-bg-color: var(--wf-surface);
-    --el-bg-color-overlay: var(--wf-surface);
+    --el-color-error: #f53f3f;
+    --el-color-error-light-3: #f87979;
+    --el-color-error-light-5: #fa9f9f;
+    --el-color-error-light-7: #fcc5c5;
+    --el-color-error-light-8: #fdd9d9;
+    --el-color-error-light-9: #feecec;
+    --el-color-error-dark-2: #c43232;
 
-    --el-border-radius-base: var(--wf-radius-control);
-    --el-font-size-base: var(--wf-text-base);
-    --el-font-family: var(--wf-font-sans);
+    --el-color-info: #86909c;
+    --el-color-info-light-3: #aab1ba;
+    --el-color-info-light-5: #c3c8ce;
+    --el-color-info-light-7: #dbdee1;
+    --el-color-info-light-8: #e6e8eb;
+    --el-color-info-light-9: #f1f3f5;
+    --el-color-info-dark-2: #6b737d;
 
-    --el-box-shadow-light: var(--wf-shadow-raised);
-    --el-box-shadow: var(--wf-shadow-float);
+    --el-text-color-primary: #1d2129;
+    --el-text-color-regular: #4e5969;
+    --el-text-color-secondary: #86909c;
+    --el-text-color-placeholder: #c9cdd4;
+    --el-text-color-disabled: #c9cdd4;
+
+    --el-border-color: #e5e6eb;
+    --el-border-color-light: #eff0f3;
+    --el-border-color-lighter: #f2f3f5;
+    --el-border-color-extra-light: #f7f8fa;
+    --el-border-color-dark: #c9cdd4;
+    --el-border-color-darker: #a9aeb8;
+
+    --el-fill-color: #f7f8fa;
+    --el-fill-color-light: #f7f8fa;
+    --el-fill-color-lighter: #fafbfc;
+    --el-fill-color-extra-light: #fcfcfd;
+    --el-fill-color-blank: #ffffff;
+
+    --el-bg-color: #ffffff;
+    --el-bg-color-page: #f2f3f5;
+    --el-bg-color-overlay: #ffffff;
+
+    --el-border-radius-base: 6px;
+    --el-border-radius-small: 4px;
+
+    --el-font-size-base: 14px;
+    --el-font-size-small: 13px;
+    --el-font-size-extra-small: 12px;
+    --el-font-size-medium: 16px;
+    --el-font-size-large: 18px;
+
+    --el-box-shadow-light: 0 2px 8px rgba(29, 33, 41, 0.08);
 }

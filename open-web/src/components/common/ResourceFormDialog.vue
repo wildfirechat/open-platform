@@ -317,9 +317,9 @@ export default {
     gap: var(--wf-space-2);
     margin-bottom: var(--wf-space-5);
     padding: var(--wf-space-3) var(--wf-space-4);
-    background: var(--wf-surface-sunken);
-    border: 1px solid var(--wf-border-subtle);
-    border-radius: var(--wf-radius-card);
+    background: var(--wf-fill);
+    border: 1px solid var(--wf-border-light);
+    border-radius: var(--wf-radius-lg);
 }
 
 .credential {
@@ -333,13 +333,13 @@ export default {
     flex: none;
     width: 72px;
     font-size: var(--wf-text-xs);
-    color: var(--wf-text-faint);
+    color: var(--wf-text-4);
 }
 
 .credential-value {
     flex: 1;
     min-width: 0;
-    color: var(--wf-text);
+    color: var(--wf-text-1);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -351,15 +351,15 @@ export default {
     padding: 2px 8px;
     font: inherit;
     font-size: var(--wf-text-xs);
-    color: var(--wf-brand-600);
+    color: var(--wf-brand);
     background: transparent;
     border: 1px solid var(--wf-border);
-    border-radius: var(--wf-radius-control);
+    border-radius: var(--wf-radius);
     cursor: pointer;
 }
 
 .ghost:hover {
-    background: var(--wf-brand-50);
+    background: var(--wf-brand-bg);
 }
 
 .portrait-field {
@@ -373,10 +373,10 @@ export default {
     flex: none;
     width: 56px;
     height: 56px;
-    border-radius: var(--wf-radius-control);
+    border-radius: var(--wf-radius);
     object-fit: cover;
-    background: var(--wf-ink-50);
-    box-shadow: inset 0 0 0 1px rgba(21, 24, 35, 0.08);
+    background: var(--wf-fill);
+    box-shadow: inset 0 0 0 1px rgba(29, 33, 41, 0.08);
 }
 
 .portrait-empty {
@@ -384,7 +384,7 @@ export default {
     align-items: center;
     justify-content: center;
     font-size: var(--wf-text-xs);
-    color: var(--wf-text-faint);
+    color: var(--wf-text-4);
 }
 
 .portrait-controls {
@@ -398,7 +398,7 @@ export default {
     margin-top: var(--wf-space-1);
     font-size: var(--wf-text-xs);
     line-height: 1.5;
-    color: var(--wf-text-muted);
+    color: var(--wf-text-3);
 }
 
 .flags {
@@ -423,12 +423,12 @@ export default {
 
 .flag-label {
     font-size: var(--wf-text-base);
-    color: var(--wf-text);
+    color: var(--wf-text-1);
 }
 
 .flag-description {
     font-size: var(--wf-text-xs);
-    color: var(--wf-text-muted);
+    color: var(--wf-text-3);
 }
 
 .footer {

@@ -17,13 +17,14 @@
                         {{ item.label }}
                     </router-link>
                 </li>
+                <li>
+                    <a class="nav-item nav-external" :href="docsUrl" target="_blank" rel="noopener">
+                        开发文档 ↗
+                    </a>
+                </li>
             </ul>
 
             <div class="rail-foot">
-                <a class="nav-item nav-external" :href="docsUrl" target="_blank" rel="noopener">
-                    开发文档 ↗
-                </a>
-
                 <el-dropdown trigger="click" placement="top-start" @command="handleCommand">
                     <button class="account" type="button">
                         <span class="avatar" aria-hidden="true">{{ accountInitial }}</span>
@@ -173,112 +174,108 @@ export default {
 .shell {
     display: flex;
     height: 100%;
-    background: var(--wf-canvas);
+    background: var(--wf-bg);
 }
 
 /* ---- 左侧导航栏：整个界面唯一的深色区域，承载品牌和账号 ---------------- */
 .rail {
     flex: none;
-    width: var(--wf-rail-width);
     display: flex;
     flex-direction: column;
-    padding: var(--wf-space-5) var(--wf-space-3) var(--wf-space-4);
-    background: var(--wf-rail);
-    color: var(--wf-ink-300);
+    width: var(--wf-sider-w);
+    height: 100%;
+    background: var(--wf-nav-bg);
+    color: var(--wf-nav-text);
 }
 
 .brand {
     display: flex;
     align-items: center;
-    gap: var(--wf-space-2);
-    padding: 0 var(--wf-space-2);
-    margin-bottom: var(--wf-space-6);
-    color: var(--wf-ink-0);
+    flex-shrink: 0;
+    gap: 10px;
+    height: var(--wf-header-h);
+    padding: 0 16px;
+    overflow: hidden;
+    color: #fff;
+    border-bottom: 1px solid var(--wf-nav-border);
 }
 
 .brand:hover {
-    color: var(--wf-ink-0);
+    color: #fff;
 }
 
 .brand-name {
-    font-size: var(--wf-text-md);
+    font-size: 15px;
     font-weight: 600;
-    letter-spacing: -0.01em;
+    white-space: nowrap;
 }
 
 .nav {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 8px;
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
 
 .nav-item {
-    position: relative;
-    display: block;
-    padding: var(--wf-space-2) var(--wf-space-3);
-    border-radius: var(--wf-radius-control);
+    display: flex;
+    align-items: center;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: var(--wf-radius);
     font-size: var(--wf-text-base);
-    color: var(--wf-ink-300);
-    transition: background-color 0.15s ease, color 0.15s ease;
+    color: var(--wf-nav-text);
+    transition: background 0.15s ease, color 0.15s ease;
 }
 
 .nav-item:hover {
-    background: var(--wf-rail-hover);
-    color: var(--wf-ink-0);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
 }
 
+/* 选中项用品牌色实底，与 organization-web 的菜单一致 */
 .nav-item.is-active {
-    color: var(--wf-ink-0);
-    background: rgba(71, 99, 220, 0.22);
-}
-
-/* 当前位置用品牌蓝的一道竖线标记 */
-.nav-item.is-active::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 3px;
-    height: 16px;
-    border-radius: var(--wf-radius-pill);
-    background: var(--wf-brand-300);
-}
-
-.rail-foot {
-    margin-top: auto;
-    display: flex;
-    flex-direction: column;
-    gap: var(--wf-space-2);
+    background: var(--wf-brand);
+    color: #fff;
+    font-weight: 500;
 }
 
 .nav-external {
     font-size: var(--wf-text-sm);
-    color: var(--wf-ink-400);
+    /* 0.45 的白在 #1d2129 上只有 4.36:1，差一点点到 AA */
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.rail-foot {
+    margin-top: auto;
+    flex-shrink: 0;
+    padding: 8px;
+    border-top: 1px solid var(--wf-nav-border);
 }
 
 .account {
     display: flex;
     align-items: center;
-    gap: var(--wf-space-2);
+    gap: 8px;
     width: 100%;
-    padding: var(--wf-space-2);
+    height: 40px;
+    padding: 0 10px;
     font: inherit;
     font-size: var(--wf-text-sm);
-    color: var(--wf-ink-200);
+    color: var(--wf-nav-text);
     text-align: left;
     background: transparent;
     border: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 0;
+    border-radius: var(--wf-radius);
     cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
 }
 
 .account:hover {
-    color: var(--wf-ink-0);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
 }
 
 .avatar {
@@ -286,13 +283,13 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     border-radius: var(--wf-radius-pill);
-    font-size: var(--wf-text-xs);
+    font-size: var(--wf-text-sm);
     font-weight: 600;
-    color: var(--wf-ink-0);
-    background: var(--wf-brand-600);
+    color: #fff;
+    background: var(--wf-brand);
 }
 
 .account-name {
@@ -316,15 +313,17 @@ export default {
 
     .rail {
         width: 100%;
+        height: auto;
         flex-direction: row;
         align-items: center;
-        gap: var(--wf-space-3);
-        padding: var(--wf-space-2) var(--wf-space-3);
+        gap: 8px;
+        padding: 0 12px;
         overflow-x: auto;
     }
 
     .brand {
-        margin-bottom: 0;
+        padding: 0;
+        border-bottom: none;
     }
 
     .brand-name {
@@ -333,30 +332,30 @@ export default {
 
     .nav {
         flex-direction: row;
+        padding: 8px 0;
     }
 
     .nav-item {
+        height: 36px;
+        padding: 0 12px;
         white-space: nowrap;
-    }
-
-    .nav-item.is-active::before {
-        display: none;
-    }
-
-    .rail-foot {
-        margin-top: 0;
-        margin-left: auto;
-        flex-direction: row;
-        align-items: center;
     }
 
     .nav-external {
         display: none;
     }
 
+    .rail-foot {
+        margin-top: 0;
+        margin-left: auto;
+        padding: 0;
+        border-top: none;
+    }
+
     .account {
         width: auto;
-        border-top: none;
+        height: 36px;
+        padding: 0 4px;
     }
 
     .account-name {

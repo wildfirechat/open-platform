@@ -157,16 +157,17 @@ export default {
 
 <style scoped>
 .resource-page {
-    padding: var(--wf-space-6) var(--wf-space-7) var(--wf-space-7);
+    padding: 20px;
     max-width: 1440px;
 }
 
+/* 与 organization-web 的 PageHeader 同一套排版 */
 .page-header {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: start;
     column-gap: var(--wf-space-4);
-    margin-bottom: var(--wf-space-5);
+    margin-bottom: var(--wf-space-4);
 }
 
 .page-heading {
@@ -176,24 +177,26 @@ export default {
 }
 
 .page-heading h1 {
+    margin: 0;
     font-size: var(--wf-text-xl);
     font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--wf-text);
+    line-height: 28px;
+    color: var(--wf-text-1);
 }
 
 .count {
     font-size: var(--wf-text-sm);
-    color: var(--wf-text-faint);
+    color: var(--wf-text-3);
     font-variant-numeric: tabular-nums;
 }
 
 .page-summary {
     grid-column: 1;
-    margin-top: var(--wf-space-1);
-    font-size: var(--wf-text-base);
-    color: var(--wf-text-muted);
-    max-width: 62ch;
+    margin: 4px 0 0;
+    font-size: var(--wf-text-sm);
+    line-height: 20px;
+    color: var(--wf-text-3);
+    max-width: 68ch;
 }
 
 .page-action {
@@ -210,13 +213,13 @@ export default {
 }
 
 .skeleton {
-    height: 130px;
-    border-radius: var(--wf-radius-card);
+    height: 128px;
+    border-radius: var(--wf-radius-lg);
     background: linear-gradient(
         100deg,
-        var(--wf-ink-100) 30%,
-        var(--wf-ink-50) 50%,
-        var(--wf-ink-100) 70%
+        var(--wf-border-light) 30%,
+        var(--wf-fill) 50%,
+        var(--wf-border-light) 70%
     );
     background-size: 220% 100%;
     animation: shimmer 1.2s linear infinite;
@@ -239,28 +242,28 @@ export default {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--wf-space-2);
-    padding: var(--wf-space-7);
+    padding: 48px 20px;
     background: var(--wf-surface);
-    border: 1px dashed var(--wf-border);
-    border-radius: var(--wf-radius-card);
+    border-radius: var(--wf-radius-lg);
+    box-shadow: var(--wf-shadow-sm);
 }
 
 .empty-title {
     font-size: var(--wf-text-md);
     font-weight: 600;
-    color: var(--wf-text);
+    color: var(--wf-text-1);
 }
 
 .empty-hint {
     margin-bottom: var(--wf-space-2);
-    font-size: var(--wf-text-base);
-    color: var(--wf-text-muted);
+    font-size: var(--wf-text-sm);
+    color: var(--wf-text-3);
     max-width: 46ch;
 }
 
 @media (max-width: 720px) {
     .resource-page {
-        padding: var(--wf-space-5) var(--wf-space-4) var(--wf-space-6);
+        padding: 16px 12px;
     }
 
     .page-header {

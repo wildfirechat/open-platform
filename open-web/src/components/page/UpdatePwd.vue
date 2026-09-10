@@ -82,22 +82,22 @@ export default {
     font-size: var(--wf-text-xl);
     font-weight: 600;
     letter-spacing: -0.01em;
-    color: var(--wf-text);
+    color: var(--wf-text-1);
 }
 
 .page-summary {
     margin-top: var(--wf-space-1);
     font-size: var(--wf-text-base);
-    color: var(--wf-text-muted);
+    color: var(--wf-text-3);
 }
 
 .card {
     max-width: 420px;
     padding: var(--wf-space-5);
     background: var(--wf-surface);
-    border: 1px solid var(--wf-border-subtle);
-    border-radius: var(--wf-radius-card);
-    box-shadow: var(--wf-shadow-raised);
+    border: 1px solid var(--wf-border-light);
+    border-radius: var(--wf-radius-lg);
+    box-shadow: var(--wf-shadow-sm);
 }
 
 @media (max-width: 720px) {

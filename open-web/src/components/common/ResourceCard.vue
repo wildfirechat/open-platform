@@ -62,7 +62,7 @@ export default {
         // 顶部色条颜色，用来区分应用 / 频道 / 机器人
         accent: {
             type: String,
-            default: 'var(--wf-brand-500)'
+            default: 'var(--wf-brand)'
         },
         idLabel: {
             type: String,
@@ -114,22 +114,22 @@ export default {
 </script>
 
 <style scoped>
+/* 无边框 + 轻阴影，与 organization-web 的 .el-card / .wf-panel 一致 */
 .resource-card {
     display: flex;
     flex-direction: column;
     gap: var(--wf-space-3);
     padding: var(--wf-space-4);
     background: var(--wf-surface);
-    border: 1px solid var(--wf-border-subtle);
-    border-radius: var(--wf-radius-card);
-    box-shadow: var(--wf-shadow-raised);
+    border: none;
+    border-radius: var(--wf-radius-lg);
+    box-shadow: var(--wf-shadow-sm);
     cursor: pointer;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: box-shadow 0.15s ease;
 }
 
 .resource-card:hover {
-    border-color: var(--wf-brand-200);
-    box-shadow: var(--wf-shadow-float);
+    box-shadow: var(--wf-shadow);
 }
 
 .card-head {
@@ -143,11 +143,11 @@ export default {
     flex: none;
     width: 44px;
     height: 44px;
-    border-radius: var(--wf-radius-control);
+    border-radius: var(--wf-radius);
     object-fit: cover;
-    background: var(--wf-ink-50);
+    background: var(--wf-fill);
     /* 浅色图标在白底上会"糊"掉，加一道内描边把它固定住 */
-    box-shadow: inset 0 0 0 1px rgba(21, 24, 35, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(29, 33, 41, 0.08);
 }
 
 .portrait-fallback {
@@ -157,7 +157,7 @@ export default {
     font-size: var(--wf-text-md);
     font-weight: 600;
     color: var(--card-accent);
-    background: var(--wf-ink-50);
+    background: var(--wf-fill);
 }
 
 .identity {
@@ -168,7 +168,7 @@ export default {
 .name {
     font-size: var(--wf-text-base);
     font-weight: 600;
-    color: var(--wf-text);
+    color: var(--wf-text-1);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -177,7 +177,7 @@ export default {
 .description {
     margin-top: 2px;
     font-size: var(--wf-text-sm);
-    color: var(--wf-text-muted);
+    color: var(--wf-text-3);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -194,7 +194,7 @@ export default {
     font-size: var(--wf-text-xs);
     line-height: 18px;
     color: var(--card-accent);
-    background: var(--wf-ink-50);
+    background: var(--wf-fill);
     border-radius: var(--wf-radius-pill);
 }
 
@@ -203,20 +203,20 @@ export default {
     align-items: center;
     gap: var(--wf-space-2);
     padding-top: var(--wf-space-3);
-    border-top: 1px solid var(--wf-border-subtle);
+    border-top: 1px solid var(--wf-border-light);
     min-width: 0;
 }
 
 .id-label {
     flex: none;
     font-size: var(--wf-text-xs);
-    color: var(--wf-text-faint);
+    color: var(--wf-text-4);
 }
 
 .id-value {
     flex: 1;
     min-width: 0;
-    color: var(--wf-ink-600);
+    color: var(--wf-text-2);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -227,10 +227,10 @@ export default {
     padding: 2px 8px;
     font: inherit;
     font-size: var(--wf-text-xs);
-    color: var(--wf-brand-600);
+    color: var(--wf-brand);
     background: transparent;
     border: 1px solid var(--wf-border);
-    border-radius: var(--wf-radius-control);
+    border-radius: var(--wf-radius);
     cursor: pointer;
     /* 平时不抢视线，鼠标移到卡片上或键盘聚焦时才显现 */
     opacity: 0;
@@ -243,7 +243,7 @@ export default {
 }
 
 .copy:hover {
-    background: var(--wf-brand-50);
+    background: var(--wf-brand-bg);
 }
 
 /* 触摸设备上没有 hover，复制按钮必须常驻 */

@@ -49,7 +49,7 @@ export default {
     width: 100%;
     height: 100%;
     padding: var(--wf-space-6);
-    background: var(--wf-canvas);
+    background: var(--wf-bg);
 }
 
 .error-body {
@@ -59,7 +59,7 @@ export default {
 .code {
     font-family: var(--wf-font-mono);
     font-size: var(--wf-text-sm);
-    color: var(--wf-text-faint);
+    color: var(--wf-text-4);
     font-variant-numeric: tabular-nums;
 }
 
@@ -68,14 +68,14 @@ export default {
     font-size: var(--wf-text-xl);
     font-weight: 600;
     letter-spacing: -0.01em;
-    color: var(--wf-text);
+    color: var(--wf-text-1);
 }
 
 .hint {
     margin-top: var(--wf-space-2);
     font-size: var(--wf-text-base);
     line-height: 1.7;
-    color: var(--wf-text-muted);
+    color: var(--wf-text-3);
 }
 
 .actions {
