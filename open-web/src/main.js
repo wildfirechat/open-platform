@@ -2,7 +2,13 @@ import {createApp} from 'vue';
 import {createI18n} from 'vue-i18n';
 import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
-import 'element-plus/dist/index.css'; // 默认主题
+
+// 样式加载顺序很重要，不要调整：
+// 1) Element Plus 自带样式；2) 设计令牌，覆盖 Element Plus 的 CSS 变量；3) 全局基础样式。
+import 'element-plus/dist/index.css';
+import './assets/css/tokens.css';
+import './assets/css/base.css';
+
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -26,7 +32,8 @@ const app = createApp(App);
 app.use(router);
 app.use(store);
 app.use(i18n);
-app.use(ElementPlus, {size: 'small', locale: zhCn});
+// 用默认尺寸而不是 small：控件高度 32px，和新的间距节奏匹配，也更好点
+app.use(ElementPlus, {locale: zhCn});
 
 app.mount('#app');
 

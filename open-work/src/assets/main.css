@@ -1,184 +1,83 @@
-* {
-    margin: 0;
-    padding: 0;
+/*
+ * 工作台全局基础样式
+ * ---------------------------------------------------------------------------
+ * 这个页面运行在客户端的内置浏览器里，只有一个视图，所以这里只保留真正需要的
+ * 规则。原来的文件来自后台管理模板（表格、面包屑、穿梭框等），在这里一条都用不到。
+ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 html,
-body,
-#app,
-.wrapper {
-    -webkit-text-size-adjust: none;
+body {
+    margin: 0;
+    padding: 0;
     width: 100%;
-    height: 100%;
-    overflow: hidden;
+    /* 原来这里是 height:100% + overflow:hidden，应用一多就再也划不动了 */
+    min-height: 100%;
+    background-color: var(--wf-canvas);
 }
 
 body {
-    font-family: 'PingFang SC', "Helvetica Neue", Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif;
+    font-family: var(--wf-font-sans);
+    font-size: var(--wf-text-base);
+    line-height: 1.5;
+    color: var(--wf-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    /* 内嵌 webview 里不需要橡皮筋效果连带滚动到宿主页面 */
+    overscroll-behavior-y: contain;
+}
+
+h1, h2, h3, p, figure, dl, dd {
+    margin: 0;
+}
+
+/* 触摸端点击时不要出现系统默认的灰色方块，按下反馈由各自的 :active 提供 */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+img {
+    max-width: 100%;
 }
 
 [v-cloak] {
     display: none !important;
 }
 
-a {
-    text-decoration: none;
-    color: var(--link-color);
-    cursor: pointer;
+:focus-visible {
+    outline: 2px solid var(--wf-accent);
+    outline-offset: 2px;
 }
 
-.l {
-    float: left;
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
 }
 
-.r {
-    float: right;
-}
-
-.mr15 {
-    margin-right: 15px;
-}
-
-.content-box {
-    position: absolute;
-    left: 250px;
-    right: 0;
-    top: 60px;
-    height: 100%;
-    bottom: 0;
-    overflow-y: scroll;
-    -webkit-transition: left .3s ease-in-out;
-    transition: left .3s ease-in-out;
-    /*background: #EFF2F5;*/
-}
-
-.content-collapse {
-    left: 65px;
-}
-
-.user-icon {
-    width: 32px;
-    height: 32px;
-    object-fit: cover;
-}
-
-.container {
-    background: var(--bg-color-container);
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    min-height: 450px;
-    margin-top: 20px;
-    color: var(--text-color-primary);
-}
-
-.crumbs {
-    margin: -40px -40px 20px -40px;
-    padding: 20px 40px;
-    background: var(--bg-color-top);
-    color: var(--text-color-primary);
-}
-
-.pagination {
-    margin: 20px 0;
-    text-align: right;
-}
-
-.plugins-tips {
-    padding: 20px 10px;
-    margin-bottom: 20px;
-}
-
-
-.mgb20 {
-    margin-bottom: 20px;
-}
-
-.move-enter-active,
-.move-leave-active {
-    transition: opacity .5s;
-}
-
-.move-enter,
-.move-leave {
-    opacity: 0;
-}
-
-
-.tab_content {
-    padding: 20px
-}
-
-.mt20 {
-    margin-top: 20px;
-}
-
-.mt5 {
-    margin-top: 5px;
-}
-
-.ml20 {
-    margin-left: 20px;
-}
-
-.ml10 {
-    margin-left: 10px;
-}
-
-.btn-container {
-    margin: 40px 0 0 255px;
-}
-
-.red {
-    color: red;
-}
-
-.clearfix:after {
-    display: block;
-    clear: both;
-    content: "";
-    visibility: hidden;
-    height: 0;
-}
-
-.clearfix {
-    zoom: 1;
-}
-
-.l {
-    float: left
-}
-
-.r {
-    float: right
-}
-
-.page_container {
-    text-align: center;
-    margin-top: 30px;
-}
-
-/*滚动条整体部分,必须要设置*/
+/* 细滚动条，桌面端内置浏览器里才会出现 */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
-    background-color: var(--scrollbar-bg);
+    background-color: transparent;
 }
 
-/*滚动条的轨道*/
-::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, .1);
-    background-color: var(--scrollbar-track);
-}
-
-/*滚动条的滑块按钮*/
 ::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: var(--scrollbar-thumb);
-    box-shadow: inset 0 0 1px rgba(0, 0, 0, .2);
+    border: 2px solid transparent;
+    border-radius: var(--wf-radius-pill);
+    background-clip: content-box;
+    background-color: var(--wf-text-faint);
 }
 
-/*滚动条的上下两端的按钮*/
-::-webkit-scrollbar-button {
-    height: 5px;
-    background-color: #aaaaaa;
+::-webkit-scrollbar-track {
+    background-color: transparent;
 }

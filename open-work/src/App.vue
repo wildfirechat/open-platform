@@ -1,49 +1,72 @@
 <template>
-    <div id="app">
-        <div class="top">
-            <p v-if="account">{{ '欢迎 ' + account.displayName }}</p>
-            <p v-else>欢迎使用野火IM工作台</p>
-        </div>
-        <div v-if="!showManageFavApp" class="apps-container">
-            <div class="title-action-container">
-                <p class="title">我的</p>
-                <p class="action" @click="showManageFavAppView">管理</p>
-            </div>
-            <div class="apps">
-                <div v-for="(app, index) in favApps" :key="index" class="app" @click="openApp(app)">
-                    <img :src="app.portraitUrl">
-                    <p>{{ app.name }}</p>
+    <div class="workbench">
+        <header class="head">
+            <p class="greeting">{{ account ? `欢迎，${account.displayName}` : '欢迎使用野火 IM 工作台' }}</p>
+        </header>
+
+        <!-- 我的应用（可管理） -->
+        <section class="panel">
+            <div class="panel-head">
+                <h2>我的</h2>
+                <div v-if="managing" class="actions">
+                    <button class="action" type="button" @click="cancelManage">取消</button>
+                    <button class="action action-primary" type="button" @click="saveManage">完成</button>
                 </div>
+                <button v-else class="action" type="button" @click="startManage">管理</button>
             </div>
-            <p v-if="favApps.length === 0" class="empty">没有应用，请点击管理按钮进行配置</p>
-        </div>
-        <div v-if="showManageFavApp" class="apps-container">
-            <div class="title-action-container">
-                <p class="title">管理</p>
-                <div class="action-container">
-                    <p class="action" @click="cancelManageFavApp">取消</p>
-                    <p class="action" @click="manageFavApp">确定</p>
-                </div>
+
+            <!-- 管理态下展示全部可选应用，平时只展示已收藏的 -->
+            <ul v-if="visibleMyApps.length" class="apps">
+                <li v-for="app in visibleMyApps" :key="app.targetId">
+                    <button
+                        class="app"
+                        type="button"
+                        :class="{ selected: managing && isChecked(app) }"
+                        :aria-pressed="managing ? isChecked(app) : null"
+                        @click="managing ? toggle(app) : openApp(app)"
+                    >
+                        <span class="tile">
+                            <img v-if="app.portraitUrl" :src="app.portraitUrl" :alt="''" @error="onIconError(app)"/>
+                            <span v-else class="tile-fallback" aria-hidden="true">{{ initial(app) }}</span>
+
+                            <!-- 管理态下的选中标记，取代原来那个原生复选框 -->
+                            <span v-if="managing" class="check" :class="{ on: isChecked(app) }" aria-hidden="true">
+                                <svg viewBox="0 0 16 16" width="11" height="11">
+                                    <path d="M3 8.4l3.2 3.2L13 4.8" fill="none" stroke="currentColor"
+                                          stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </span>
+                        <span class="app-name">{{ app.name }}</span>
+                    </button>
+                </li>
+            </ul>
+
+            <p v-else class="empty">
+                {{ managing ? '还没有可添加的应用，请先到开放平台创建。' : '还没有应用，点右上角「管理」添加。' }}
+            </p>
+        </section>
+
+        <!-- 全员应用，所有人可见，不可取消 -->
+        <section class="panel">
+            <div class="panel-head">
+                <h2>全员</h2>
             </div>
-            <div class="apps">
-                <div v-for="(app, index) in apps" :key="index" class="app" :class="{checked: app._checked}" @click="checkApp(app)">
-                    <img :src="app.portraitUrl">
-                    <p>{{ app.name }}</p>
-                    <input type="checkbox" :value="app.targetId" v-model="checkedAppIds">
-                </div>
-            </div>
-            <p v-if="apps.length === 0" class="empty">没有应用，请到开放平台创建</p>
-        </div>
-        <div class="apps-container">
-            <p class="title">全员</p>
-            <div class="apps">
-                <div v-for="(app, index) in globalApps" :key="index" class="app" @click="openApp(app)">
-                    <img :src="app.portraitUrl">
-                    <p>{{ app.name }}</p>
-                </div>
-            </div>
-            <p v-if="globalApps.length === 0" class="empty">没有应用，请到开放平台添加</p>
-        </div>
+
+            <ul v-if="globalApps.length" class="apps">
+                <li v-for="app in globalApps" :key="app.targetId">
+                    <button class="app" type="button" @click="openApp(app)">
+                        <span class="tile">
+                            <img v-if="app.portraitUrl" :src="app.portraitUrl" :alt="''" @error="onIconError(app)"/>
+                            <span v-else class="tile-fallback" aria-hidden="true">{{ initial(app) }}</span>
+                        </span>
+                        <span class="app-name">{{ app.name }}</span>
+                    </button>
+                </li>
+            </ul>
+
+            <p v-else class="empty">还没有全员应用，请到开放平台添加。</p>
+        </section>
     </div>
 </template>
 
@@ -62,10 +85,16 @@ export default {
             apps: [], // 非 globalApps
             globalApps: [],
             checkedAppIds: [],
-            showManageFavApp: false,
+            managing: false,
         }
     },
     components: {},
+    computed: {
+        // 管理态列出全部可收藏的应用，平时只列已收藏的
+        visibleMyApps() {
+            return this.managing ? this.apps : this.favApps;
+        }
+    },
     created() {
         document.title = '野火IM工作台'
         this.detectTheme();
@@ -105,9 +134,6 @@ export default {
         getFavAppList() {
             api.getFavAppList().then(favApps => {
                 this.favApps = favApps;
-                this.favApps.forEach(app => {
-                    this.checkedAppIds.push(app.targetId);
-                })
             }).catch(reason => {
                 console.log('getFavAppList error', reason)
             })
@@ -122,7 +148,7 @@ export default {
                     appType: 2,
                     authCode: authCode,
                 }).then(() => {
-                    this.getFavAppList(false);
+                    this.getFavAppList();
                     this.getAccount(false);
                 }).catch(reason => {
                     console.log('login failed', reason);
@@ -137,13 +163,50 @@ export default {
             })
         },
 
-        showManageFavAppView() {
-            if (this.account) {
-                this.showManageFavApp = true;
-            } else {
+        startManage() {
+            if (!this.account) {
                 console.log('not login, to login')
                 this.login();
+                return;
             }
+            // 每次进入管理态都按当前收藏重新初始化勾选状态。
+            // 原来只在拉取收藏列表时 push 过一次，取消一次之后就再也不会勾上了。
+            this.checkedAppIds = this.favApps.map(app => app.targetId);
+            this.managing = true;
+        },
+
+        cancelManage() {
+            this.managing = false;
+            this.checkedAppIds = [];
+        },
+
+        isChecked(app) {
+            return this.checkedAppIds.indexOf(app.targetId) >= 0;
+        },
+
+        toggle(app) {
+            if (this.isChecked(app)) {
+                this.checkedAppIds = this.checkedAppIds.filter(id => id !== app.targetId);
+            } else {
+                this.checkedAppIds = this.checkedAppIds.concat(app.targetId);
+            }
+        },
+
+        saveManage() {
+            const favIds = this.favApps.map(app => app.targetId);
+            // 原来这里拿 favApps（对象数组）去 indexOf 一个 targetId 字符串，
+            // 结果恒为 -1，每次都会把已收藏的应用重新收藏一遍。
+            const toFavApps = this.checkedAppIds.filter(id => favIds.indexOf(id) === -1);
+            const toUnFavApps = favIds.filter(id => this.checkedAppIds.indexOf(id) === -1);
+
+            console.log('manageFavApp', toFavApps, toUnFavApps);
+            Promise.all([api.favApps(toFavApps), api.unFavApps(toUnFavApps)]).then(value => {
+                console.log('manageFavApp result', value);
+                this.getFavAppList();
+            })
+
+            this.managing = false;
+            this.checkedAppIds = [];
         },
 
         openApp(app) {
@@ -154,168 +217,182 @@ export default {
             wf.openUrl(url, {name: app.name});
         },
 
-        checkApp(app) {
-            let index = this.checkedAppIds.indexOf(app.targetId);
-            if (index >= 0) {
-                this.checkedAppIds = this.checkedAppIds.filter(id => id !== app.targetId);
-            } else {
-                this.checkedAppIds.push(app.targetId);
-            }
+        initial(app) {
+            return app.name ? app.name.trim().charAt(0) : '?';
         },
 
-        cancelManageFavApp() {
-            this.showManageFavApp = false;
-            this.checkedAppIds = [];
-        },
-
-        manageFavApp() {
-            let toUnFavApps = [];
-            let toFavApps = [];
-            this.favApps.forEach(app => {
-                if (this.checkedAppIds.indexOf(app.targetId) === -1) {
-                    toUnFavApps.push(app.targetId);
-                }
-            })
-
-            this.checkedAppIds.forEach(targetId => {
-                if (this.favApps.length > 0) {
-                    if (this.favApps.indexOf(targetId) === -1) {
-                        toFavApps.push(targetId);
-                    }
-                } else {
-                    toFavApps.push(targetId);
-                }
-            })
-
-            console.log('manageFavApp', toFavApps, toUnFavApps);
-            let fp = api.favApps(toFavApps);
-            let ufp = api.unFavApps(toUnFavApps);
-            Promise.all([fp, ufp]).then(value => {
-                console.log('manageFavApp result', value);
-                this.getFavAppList(false);
-            })
-
-            this.showManageFavApp = false;
-            this.checkedAppIds = [];
+        // 图标地址失效时回退到首字占位，避免出现破图
+        onIconError(app) {
+            app.portraitUrl = '';
         }
     }
 }
 </script>
 
-<style lang="css" scoped>
-@import "./assets/theme.css";
-@import "./assets/main.css";
+<style scoped>
+.workbench {
+    min-height: 100vh;
+    padding: var(--wf-space-3);
+    /* 刘海屏 / 底部安全区：这个页面直接铺满客户端的 webview */
+    padding-top: calc(var(--wf-space-3) + env(safe-area-inset-top));
+    padding-bottom: calc(var(--wf-space-5) + env(safe-area-inset-bottom));
+    background: var(--wf-canvas);
+}
 
-body {
+.head {
+    padding: var(--wf-space-1) var(--wf-space-2) var(--wf-space-3);
+}
+
+/* 问候语是这个页面唯一的标题行 */
+.greeting {
+    font-size: var(--wf-text-md);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--wf-text);
+}
+
+/* ---- 分区 -------------------------------------------------------------- */
+.panel {
+    margin-bottom: var(--wf-space-3);
+    padding: var(--wf-space-2) var(--wf-space-3) var(--wf-space-3);
+    background: var(--wf-surface);
+    border-radius: var(--wf-radius-card);
+}
+
+.panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 36px;
+}
+
+.panel-head h2 {
+    font-size: var(--wf-text-sm);
+    font-weight: 600;
+    color: var(--wf-text-muted);
+}
+
+.actions {
+    display: flex;
+    gap: var(--wf-space-1);
+}
+
+.action {
+    padding: 6px 10px;
+    font: inherit;
+    font-size: var(--wf-text-sm);
+    color: var(--wf-accent);
+    background: transparent;
+    border: none;
+    border-radius: var(--wf-radius-pill);
+    cursor: pointer;
+}
+
+.action:active {
+    background: var(--wf-pressed);
+}
+
+.action-primary {
+    font-weight: 600;
+}
+
+/* ---- 应用宫格 ---------------------------------------------------------- */
+.apps {
+    list-style: none;
     margin: 0;
     padding: 0;
-}
-
-#app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: var(--text-color-primary);
-    background-color: var(--bg-color-main);
-    width: 100vw;
-    height: 100vh;
-}
-
-.top {
-    height: 60px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    background-color: var(--bg-color-top);
-}
-
-.top p {
-    padding-left: 15px;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.apps-container {
-    background-color: var(--bg-color-container);
-    border-radius: 5px;
-    margin: 5px;
-}
-
-.apps-container .title {
-    text-align: left;
-    padding: 5px;
-}
-
-.title-action-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.title-action-container .action-container {
-    display: flex;
-    flex-direction: row;
-}
-
-.title-action-container .action {
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: var(--link-color);
-}
-
-.title-action-container .action:active {
-    background-color: var(--action-bg-active);
-}
-
-.apps-container .empty {
-    padding: 10px 0;
-    font-size: 14px;
-    color: var(--empty-text-color);
-}
-
-.apps {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 80px);
-    justify-content: space-between;
+    /* 手机上正好 4 列；桌面端内置浏览器变宽时自动加列 */
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: var(--wf-space-2) 0;
 }
 
 .app {
-    margin: 5px 0;
-    width: 80px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 5px 0;
-    position: relative;
+    gap: 6px;
+    width: 100%;
+    padding: var(--wf-space-2) 2px;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 .app:active {
-    background-color: var(--action-bg-active);
-    border-radius: 5px;
+    background: var(--wf-pressed);
 }
 
-.app.checked {
-    background-color: var(--action-bg-active);
-    border-radius: 5px;
+.tile {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--wf-radius-tile);
+    background: var(--wf-tile);
+    /* 浅色图标在浅色底上会糊掉，用一道内描边把边界固定住 */
+    box-shadow: inset 0 0 0 1px var(--wf-tile-border);
+    overflow: hidden;
 }
 
-.app img {
-    width: 40px;
-    height: 40px;
+.tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.app p {
-    margin: 5px 0 0 0;
-    font-size: 12px;
-    color: var(--text-color-primary);
+.tile-fallback {
+    font-size: var(--wf-text-base);
+    font-weight: 600;
+    color: var(--wf-accent);
 }
 
-.app input {
+.app-name {
+    max-width: 100%;
+    font-size: var(--wf-text-xs);
+    line-height: 1.4;
+    color: var(--wf-text);
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ---- 管理态的选中标记 --------------------------------------------------- */
+.check {
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 2px;
+    right: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    height: 17px;
+    border-radius: var(--wf-radius-pill);
+    color: transparent;
+    background: var(--wf-surface);
+    box-shadow: inset 0 0 0 1.5px var(--wf-check-ring);
+}
+
+.check.on {
+    color: #FFFFFF;
+    background: var(--wf-accent);
+    box-shadow: none;
+}
+
+.app.selected .tile {
+    box-shadow: inset 0 0 0 2px var(--wf-accent);
+}
+
+.empty {
+    padding: var(--wf-space-4) var(--wf-space-1) var(--wf-space-3);
+    font-size: var(--wf-text-sm);
+    line-height: 1.6;
+    color: var(--wf-text-faint);
 }
 </style>

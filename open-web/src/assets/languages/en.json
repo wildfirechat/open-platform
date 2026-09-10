@@ -1,2 +1,6 @@
 {
+    "common": {
+        "user_name": "Username",
+        "password": "Password"
+    }
 }

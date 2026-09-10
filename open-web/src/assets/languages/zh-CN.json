@@ -254,7 +254,8 @@
         "message": "消息",
         "modify": "修改",
         "not_choose_now": "暂不选择",
-        "exit": "退出"
+        "exit": "退出",
+        "password": "密码"
     },
     "setting": {
         "update_portrait": "修改头像",

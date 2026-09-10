@@ -14,11 +14,6 @@ const routes = [
         component: () => import('../components/common/Home.vue'),
         meta: {title: '系统首页'},
         children: [
-            // {
-            //     path: '/index',
-            //     component: () => import('../components/page/Index.vue'),
-            //     meta: {title: '野火开放平台'}
-            // },
             {
                 path: '/index',
                 component: () => import('../components/page/app/app.vue'),

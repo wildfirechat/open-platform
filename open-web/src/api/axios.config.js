@@ -1,10 +1,12 @@
 import Axios from 'axios'
-import App from '../main'
+import {ElMessage} from 'element-plus'
+import router from '../router'
 // axios实例
 const instance = Axios.create({
     // 针对实际情况进行修改
     // 如果是默认部署方式，即前后端部署在同一个服务器上，保持原样即可
     // 如果前后端分开部署，需要修改为后端服务器地址
+    // baseURL: 'http://localhost:8880/api',
     baseURL: './api',
     withCredentials: true,
     headers: {
@@ -29,10 +31,10 @@ instance.interceptors.response.use(response => {
     } else {
         if (response.config.url !== '/login' && code === 13) {
             localStorage.removeItem('authToken');
-            App.$message.error('请先登陆')
-            App.$router.replace('/login')
+            ElMessage.error('请先登陆')
+            router.replace('/login')
         }
-        App.$message.error(message);
+        ElMessage.error(message);
 
         return Promise.reject({code});
     }
