@@ -37,6 +37,28 @@ config是IM验证页面合法性的方法。页面去后台获取config签名，
 ## 编译
 项目是前后端分离的，但为了方便部署，默认打包是放到一起的。编译时请先编译[open-work](./open-work)，然后编译[open-web](./open-web)，最后编译[open-server](./open-server)。默认前端页面编译后会拷贝到后端的resource目录，这样就可以前后端放到一起部署，也可以自行修改为前后端分离的方式部署。
 
+### 前端环境与依赖
+两个前端项目（[open-web](./open-web) 和 [open-work](./open-work)）都已经升级到 **Vue 3**。
+
+* node >= 16（推荐 v18，开发验证版本 v18.19.0）
+* npm >= 8（开发验证版本 v10.2.3）
+
+主要依赖版本：
+
+| 依赖 | 版本 | open-web | open-work |
+| --- | --- | :---: | :---: |
+| vue | ^3.5.13 | ✓ | ✓ |
+| vue-router | ^4.5.0 | ✓ | |
+| vuex | ^4.1.0 | ✓ | |
+| vue-i18n | ^9.14.2 | ✓ | |
+| element-plus | ^2.9.1 | ✓ | |
+| @element-plus/icons-vue | ^2.3.1 | ✓ | |
+| dsbridge | ^3.1.4 | | ✓ |
+| axios | ^0.27.2 | ✓ | ✓ |
+| @vue/cli-service | ~5.0.8 (webpack 5) | ✓ | ✓ |
+
+其中 open-web 的 UI 库由 element-ui 换成了 [Element Plus](https://element-plus.org)（element-ui 只支持 Vue 2）。各项目更详细的说明见各自的 README。
+
 ## 启动
 请参考[open-server](./open-server)说明。
 

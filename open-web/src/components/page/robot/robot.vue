@@ -10,13 +10,13 @@
                     <el-button type="primary" @click="createAppDialogVisible = true">创建机器人</el-button>
                 </div>
                 <el-row :gutter="20" v-if="apps && apps.length > 0">
-                    <el-col :span="6" v-for="(app, index) in apps" :key="index" @click.native="showAppInfo(app)">
+                    <el-col :span="6" v-for="(app, index) in apps" :key="index" @click="showAppInfo(app)">
                         <AppCard :app="app"/>
                     </el-col>
                 </el-row>
                 <el-empty v-else description="暂无机器人" image=""></el-empty>
             </el-card>
-            <el-dialog title="创建机器人" :visible.sync="createAppDialogVisible">
+            <el-dialog title="创建机器人" v-model="createAppDialogVisible">
                 <el-form :model="createAppInfo" :rules="rules" ref="createAppForm">
                     <el-form-item label="机器人图标地址" :label-width="formLabelWidth" prop="portraitUrl">
                         <el-input v-model.trim="createAppInfo.portraitUrl" autocomplete="off" placeholder="机器人图标地址"></el-input>
@@ -28,7 +28,9 @@
                             :before-upload="beforePortraitUpload"
                             :show-file-list="false">
                             <el-button size="small" type="primary" style="margin-top: 8px">点击上传</el-button>
-                            <div slot="tip" class="el-upload__tip">需要先配置 oss，只能上传jpg/png文件，且不超过2MB</div>
+                            <template #tip>
+                                <div class="el-upload__tip">需要先配置 oss，只能上传jpg/png文件，且不超过2MB</div>
+                            </template>
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="机器人名称" :label-width="formLabelWidth" prop="name">
@@ -41,13 +43,15 @@
                         <el-input v-model.trim="createAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
                 </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="createAppDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="submitForm('createAppForm')">确 定</el-button>
-                </div>
+                <template #footer>
+                    <div class="dialog-footer">
+                        <el-button @click="createAppDialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="submitForm('createAppForm')">确 定</el-button>
+                    </div>
+                </template>
             </el-dialog>
 
-            <el-dialog title="修改机器人" :visible.sync="modifyAppDialogVisible">
+            <el-dialog title="修改机器人" v-model="modifyAppDialogVisible">
                 <el-form :model="modifyAppInfo" :rules="rules" ref="modifyAppForm">
                     <el-form-item label="targetId" :label-width="formLabelWidth">
                         <p>{{ modifyAppInfo.targetId }}</p>
@@ -65,7 +69,9 @@
                             :before-upload="beforePortraitUpload"
                             :show-file-list="false">
                             <el-button size="small" type="primary" style="margin-top: 8px">点击上传</el-button>
-                            <div slot="tip" class="el-upload__tip">需要先配置 oss，只能上传jpg/png文件，且不超过2MB</div>
+                            <template #tip>
+                                <div class="el-upload__tip">需要先配置 oss，只能上传jpg/png文件，且不超过2MB</div>
+                            </template>
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="机器人名称" :label-width="formLabelWidth" prop="name">
@@ -78,11 +84,13 @@
                         <el-input v-model.trim="modifyAppInfo.serverUrl" autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                     </el-form-item>
                 </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="modifyAppDialogVisible = false">取 消</el-button>
-                    <el-button type="danger" @click="deleteApp">删 除</el-button>
-                    <el-button type="primary" @click="updateApp('modifyAppForm')">修 改</el-button>
-                </div>
+                <template #footer>
+                    <div class="dialog-footer">
+                        <el-button @click="modifyAppDialogVisible = false">取 消</el-button>
+                        <el-button type="danger" @click="deleteApp">删 除</el-button>
+                        <el-button type="primary" @click="updateApp('modifyAppForm')">修 改</el-button>
+                    </div>
+                </template>
             </el-dialog>
         </el-main>
     </div>
@@ -217,7 +225,7 @@ export default {
     padding: 20px 30px;
 }
 
->>> .el-empty__image {
+:deep(.el-empty__image) {
     display: none;
 }
 

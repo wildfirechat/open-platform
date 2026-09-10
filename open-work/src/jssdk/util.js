@@ -26,7 +26,8 @@ export function bridge() {
     // preload
     console.log('init bridge-');
     console.log('userAgent', navigator.userAgent);
-    if((process && process.versions && process.versions.electron) || navigator.userAgent.toLowerCase().indexOf('electron') >= 0){
+    // webpack5 不再自动 mock node 的 process，直接引用裸 process 会 ReferenceError，需要先 typeof 判断
+    if((typeof process !== 'undefined' && process.versions && process.versions.electron) || navigator.userAgent.toLowerCase().indexOf('electron') >= 0){
         console.log('js bridge, electron')
         // electron pc 端，注入了 window.__wf_bridge_
         return window.__wf_bridge_;

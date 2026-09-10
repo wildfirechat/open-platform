@@ -52,7 +52,7 @@ export default {
     font-size: 14px;
 }
 
->>>.el-avatar > img {
+:deep(.el-avatar > img) {
     width: 100%;
 }
 

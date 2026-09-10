@@ -147,7 +147,10 @@ export default {
         },
 
         openApp(app) {
-            let url = process ? app.desktopUrl : app.mobileUrl;
+            // 原来是 `process ? app.desktopUrl : app.mobileUrl`，webpack4 把 process mock 成了 `{}`，
+            // 判断恒为真，即一直取的 desktopUrl。webpack5 不再 mock，裸 process 会 ReferenceError，
+            // 这里保持原有行为。如果需要区分移动端/桌面端，应当另外判断平台。
+            let url = app.desktopUrl;
             wf.openUrl(url, {name: app.name});
         },
 

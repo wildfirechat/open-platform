@@ -2,7 +2,7 @@
     <div class='bgg' :style="{'backgroundImage':'url(' +require('../../assets/images/pic.png') + ')'}">
         <div class="ms-title">野火IM开放平台</div>
         <div class="ms-login">
-            <el-form @submit.native.prevent :model="loginForm" :rules="rules" ref="loginForm" label-width="0px"
+            <el-form @submit.prevent :model="loginForm" :rules="rules" ref="loginForm" label-width="0px"
                      class="loginForm">
                 <el-form-item prop="username">
                     <span>用户名</span>

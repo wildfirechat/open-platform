@@ -9,35 +9,47 @@
                 <el-menu-item index="/dev/channel">频道</el-menu-item>
                 <el-menu-item index="/dev/robot">机器人</el-menu-item>
                 <el-menu-item>
-                    <template slot="title">
-                        <a href="https://docs.wildfirechat.cn/open" style="color: #303133" target="_blank">开发文档</a>
+                    <template #title>
+                        <!-- 没有 index，需要阻止冒泡，避免 el-menu 的 router 模式跳到一个空路由 -->
+                        <a href="https://docs.wildfirechat.cn/open" style="color: #303133" target="_blank"
+                           @click.stop>开发文档</a>
                     </template>
                 </el-menu-item>
             </el-menu>
         </el-aside>
         <el-container :class="{'content-collapse':collapse}">
             <el-header style="text-align: left; font-size: 14px; display: flex; padding-right: 40px">
-                <el-button type="text"><i class="el-icon-arrow-left"></i></el-button>
+                <el-button link>
+                    <el-icon>
+                        <ArrowLeft/>
+                    </el-icon>
+                </el-button>
                 <span style="flex: 1"> </span>
-                <el-dropdown>
-                    <i class="el-icon-setting" style="margin-right: 15px"></i>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
-                        <el-dropdown-item @click.native="modifyPwdDialogVisible = true">修改密码</el-dropdown-item>
-                    </el-dropdown-menu>
+                <el-dropdown style="margin-right: 15px" @command="handleCommand">
+                    <el-icon>
+                        <Setting/>
+                    </el-icon>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item command="logout">退出</el-dropdown-item>
+                            <el-dropdown-item command="updatePwd">修改密码</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
                 </el-dropdown>
                 <span>{{ account.displayName }}</span>
             </el-header>
             <el-main style="padding: 0">
-                <transition name="move" mode="out-in">
-                    <keep-alive>
-                        <router-view></router-view>
-                    </keep-alive>
-                </transition>
+                <router-view v-slot="{ Component }">
+                    <transition name="move" mode="out-in">
+                        <keep-alive>
+                            <component :is="Component"/>
+                        </keep-alive>
+                    </transition>
+                </router-view>
             </el-main>
 
 
-            <el-dialog title="修改密码" :visible.sync="modifyPwdDialogVisible">
+            <el-dialog title="修改密码" v-model="modifyPwdDialogVisible">
                 <el-form :model="updatePwdRequest" ref="updatePwdForm" :rules="rules">
                     <el-form-item label="旧密码" :label-width="formLabelWidth" prop="oldPwd">
                         <el-input v-model="updatePwdRequest.oldPwd" autocomplete="off" placeholder="请输入旧密码"></el-input>
@@ -49,10 +61,12 @@
                         <el-input v-model="updatePwdRequest.confirmNewPwd" autocomplete="off" placeholder="请确认新密码"></el-input>
                     </el-form-item>
                 </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="modifyPwdDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="updatePwd('updatePwdForm')">修 改</el-button>
-                </div>
+                <template #footer>
+                    <div class="dialog-footer">
+                        <el-button @click="modifyPwdDialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="updatePwd('updatePwdForm')">修 改</el-button>
+                    </div>
+                </template>
             </el-dialog>
 
         </el-container>
@@ -62,6 +76,7 @@
 <script>
 
 import {mapState} from "vuex";
+import {ArrowLeft, Setting} from '@element-plus/icons-vue'
 
 export default {
     data() {
@@ -84,7 +99,7 @@ export default {
             },
         }
     },
-    components: {},
+    components: {ArrowLeft, Setting},
     created() {
         this.$store.dispatch('getAppList');
         this.$store.dispatch('getAccount')
@@ -93,8 +108,15 @@ export default {
         account: state => state.user.account,
     }),
     methods: {
+        handleCommand(command) {
+            if (command === 'logout') {
+                this.logout();
+            } else if (command === 'updatePwd') {
+                this.modifyPwdDialogVisible = true;
+            }
+        },
         go2home() {
-            if (this.$router.history.current.path !== '/index') {
+            if (this.$route.path !== '/index') {
                 this.$router.replace('/index')
             }
         },

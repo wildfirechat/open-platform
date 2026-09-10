@@ -4,7 +4,7 @@
         <div>
             <el-row v-if="apps && apps.length > 0" :gutter="20">
                 <el-col :span="6" v-for="(app, index) in apps" :key="index">
-                    <AppCard :app="app" @click.native="showAppInfo(app)"/>
+                    <AppCard :app="app" @click="showAppInfo(app)"/>
                 </el-col>
             </el-row>
             <el-empty v-else description="暂无应用" image="">
@@ -15,7 +15,7 @@
             <h2>频道</h2>
             <el-row v-if="channels && channels.length > 0" :gutter="20">
                 <el-col :span="6" v-for="(app, index) in channels" :key="index">
-                    <AppCard :app="app" @click.native="showAppInfo(app)"/>
+                    <AppCard :app="app" @click="showAppInfo(app)"/>
                 </el-col>
             </el-row>
             <el-empty v-else description="暂无频道">
@@ -26,14 +26,14 @@
             <h2>机器人</h2>
             <el-row v-if="robots && robots.length > 0" :gutter="20">
                 <el-col :span="6" v-for="(app, index) in robots" :key="index">
-                    <AppCard :app="app" @click.native="showAppInfo(app)"/>
+                    <AppCard :app="app" @click="showAppInfo(app)"/>
                 </el-col>
             </el-row>
             <el-empty v-else description="暂无机器人">
                 <el-button @click="createApp(2)" type="primary">创建机器人</el-button>
             </el-empty>
         </div>
-        <el-dialog title="应用信息" :visible.sync="appInfoDialogVisible">
+        <el-dialog title="应用信息" v-model="appInfoDialogVisible">
             <el-form :model="appInfo">
                 <el-form-item label="targetId" :label-width="formLabelWidth">
                     <p>{{ appInfo.targetId }}</p>
@@ -59,11 +59,13 @@
                 <el-form-item label="回调/服务端地址" :label-width="formLabelWidth">
                     <el-input v-model="appInfo.serverUrl" disabled autocomplete="off" placeholder="https://wildfirechat.cn"></el-input>
                 </el-form-item>
-                <el-checkbox label="是否是全局应用" v-model="appInfo.global" disabled></el-checkbox>
+                <el-checkbox v-model="appInfo.global" disabled>是否是全局应用</el-checkbox>
             </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="appInfoDialogVisible = false">确 定</el-button>
-            </div>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="appInfoDialogVisible = false">确 定</el-button>
+                </div>
+            </template>
         </el-dialog>
     </el-main>
 </template>
@@ -108,7 +110,7 @@ h1, h2 {
     font-weight: normal;
 }
 
->>>.el-empty__image{
+:deep(.el-empty__image) {
     display: none;
 }
 </style>
