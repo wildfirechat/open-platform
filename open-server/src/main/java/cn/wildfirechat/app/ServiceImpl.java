@@ -42,6 +42,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -57,8 +59,12 @@ import java.nio.file.Files;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import static cn.wildfirechat.app.RestResult.RestCode.*;
@@ -67,6 +73,12 @@ import static cn.wildfirechat.proto.ProtoConstants.ChannelState.*;
 @org.springframework.stereotype.Service
 public class ServiceImpl implements Service {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceImpl.class);
+
+    //允许上传的图片扩展名，不包含 svg（svg 里可以嵌脚本）
+    private static final Set<String> IMAGE_SUFFIXES = new HashSet<>(Arrays.asList(".jpg", ".jpeg", ".png", ".gif", ".webp"));
+
+    //data.sql 里预置的管理员默认密码，启动时检查是否还在使用
+    private static final String DEFAULT_ADMIN_PASSWORD = "admin123";
 
     @Value("${im.admin_url}")
     private String mAdminUrl;
@@ -106,6 +118,19 @@ public class ServiceImpl implements Service {
     private void init() {
         AdminConfig.initAdmin(mAdminUrl, mAdminSecret);
         rateLimiter = new RateLimiter(60, 200);
+    }
+
+    //默认密码写在文档里是公开的，没改等于管理后台没有密码，启动时检查并告警
+    @EventListener(ApplicationReadyEvent.class)
+    public void checkDefaultPassword() {
+        userRepository.findAll().forEach(user -> {
+            String md5 = new Base64().encodeToString(DigestUtils.getDigest("MD5").digest((DEFAULT_ADMIN_PASSWORD + user.getSalt()).getBytes(StandardCharsets.UTF_8)));
+            if (md5.equals(user.getPasswordMd5())) {
+                LOG.warn("*****************************************************************");
+                LOG.warn("账户 {} 仍在使用默认密码，请立即登录管理后台修改密码！", user.getAccount());
+                LOG.warn("*****************************************************************");
+            }
+        });
     }
 
     public RestResult login(HttpServletResponse httpResponse, String account, String password) {
@@ -371,8 +396,16 @@ public class ServiceImpl implements Service {
         String suffix = "";
         String prefix = UUID.randomUUID().toString();
         if (originalFilename != null && originalFilename.contains(".")) {
-            suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+            suffix = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase(Locale.ROOT);
         }
+
+        //限制只能上传图片。Content-Type 是客户端自己声明的，不可信，扩展名必须在白名单内：
+        //一是避免 html/svg 等可执行脚本的文件存到对象存储上，二是避免文件名里的 ../ 等字符拼进对象 key
+        String contentType = file.getContentType();
+        if (!IMAGE_SUFFIXES.contains(suffix) || contentType == null || !contentType.startsWith("image/")) {
+            return RestResult.result(ERROR_INVALID_PARAMETER, "只能上传图片文件");
+        }
+
         String fileName = prefix + suffix;
         File localFile = File.createTempFile(prefix, suffix);
 
@@ -382,13 +415,6 @@ public class ServiceImpl implements Service {
             e.printStackTrace();
             localFile.delete();
             return RestResult.error(ERROR_SERVER_ERROR);
-        }
-
-        //限制只能上传图片
-        String contentType = file.getContentType();
-        if (contentType == null || !contentType.startsWith("image/")) {
-            localFile.delete();
-            return RestResult.result(ERROR_INVALID_PARAMETER, "只能上传图片文件");
         }
 
         String bucket = ossBucket;

@@ -11,13 +11,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class DBSessionDao implements SessionDAO {
+    /**
+     * 会话反序列化只允许这些类型，避免读到库里的恶意字节流时执行任意代码。
+     * SimplePrincipalCollection 是 Shiro 登录后写入会话的身份信息；SavedRequest 是未登录访问受限接口时 Shiro 记下的原请求；
+     * Number 是 Long/Integer 等包装类的父类，反序列化时也会被校验。
+     */
+    private static final Set<String> ALLOWED_CLASSES = new HashSet<>(Arrays.asList(
+            "org.apache.shiro.session.mgt.SimpleSession",
+            "org.apache.shiro.subject.SimplePrincipalCollection",
+            "org.apache.shiro.web.util.SavedRequest",
+            "java.lang.Number",
+            "java.util.HashMap",
+            "java.util.LinkedHashMap",
+            "java.util.HashSet",
+            "java.util.LinkedHashSet",
+            "java.util.ArrayList",
+            "java.util.Date",
+            "java.lang.String",
+            "java.lang.Long",
+            "java.lang.Integer",
+            "java.lang.Short",
+            "java.lang.Byte",
+            "java.lang.Character",
+            "java.lang.Float",
+            "java.lang.Double",
+            "java.lang.Boolean"
+    ));
+
     private Map<Object, Session> sessionMap = new ConcurrentHashMap<>();
 
     @Autowired
@@ -75,18 +105,47 @@ public class DBSessionDao implements SessionDAO {
 
     // restore session
     private Session byteToSession(byte[] bytes){
-        ByteArrayInputStream bi = new ByteArrayInputStream(bytes);
-        ObjectInputStream in;
-        SimpleSession session = null;
-        try {
-            in = new ObjectInputStream(bi);
-            session = (SimpleSession) in.readObject();
+        if (bytes == null || bytes.length == 0) {
+            return null;
+        }
+        try (ObjectInputStream in = new SafeObjectInputStream(new ByteArrayInputStream(bytes))) {
+            Object object = in.readObject();
+            if (object instanceof SimpleSession) {
+                return (SimpleSession) object;
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
+    }
 
-        return session;
+    /**
+     * 只允许会话需要的类型，其它类一律拒绝。
+     * 库里的 session_data 一旦被写入恶意字节流，默认的 ObjectInputStream 会直接反序列化并执行 gadget。
+     */
+    private static final class SafeObjectInputStream extends ObjectInputStream {
+        SafeObjectInputStream(InputStream in) throws IOException {
+            super(in);
+        }
+
+        @Override
+        protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException {
+            String name = desc.getName();
+            if (name.startsWith("[")) {
+                // 数组只放行基本类型数组、String[]、Object[]
+                if (name.length() == 2
+                        || "[Ljava.lang.String;".equals(name)
+                        || "[Ljava.lang.Object;".equals(name)) {
+                    return super.resolveClass(desc);
+                }
+                throw new InvalidClassException("Unauthorized array class", name);
+            }
+            if (!ALLOWED_CLASSES.contains(name)) {
+                throw new InvalidClassException("Unauthorized deserialization class", name);
+            }
+            return super.resolveClass(desc);
+        }
     }
 }
